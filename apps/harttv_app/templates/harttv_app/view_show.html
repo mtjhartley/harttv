@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
+        <h2>This is a show's page</h2>
+
+        <h2>Show Name: {{show.title}}</h2>
+        <h3>Description: {{show.description}}</h3>
+        <h4>Status: {{show.status}}</h4>
+        <h4>Premiere Date: {{show.premiered}}</h4>
+        <h5>Network: {{show.network}}</h5>
+        <img src="{{show.image_link}}" alt='show_image'>
+        {% for episode in show.episodes.all|slice:"3:8" %}
+            <p>Episode Title: {{episode.title}}</p>
+            <p>Originally Aired: {{episode.airdate}}</p>
+
+        {% endfor %} 
+
+
+    </body>
+</html>
