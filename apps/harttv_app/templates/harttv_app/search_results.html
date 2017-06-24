@@ -9,6 +9,15 @@
     <body>
         <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
         <a href="{% url 'test_search_bar' %}">Search!</a>
+        <h2>Here are your search results</h2>
+        {% for show in contextShow %}
+            <img src="{{show.image}}" style="width: 200px; height: 200px;">
+            <h3><a href="{% url 'view_show' show_maze_id=show.maze_id %}">{{show.name}}</a></h3>
+            <p>{{show.description}}</p>
+  
+            
+        {% endfor %}
+
         
 
     </body>

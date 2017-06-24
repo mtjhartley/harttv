@@ -41,6 +41,9 @@ class Show(models.Model):
     maze_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    #let's add a many to many field here for FAVORITES 1 user many favorite shows, 1 show can be favorited bym any users. 
+    #this will be distinct from currently watching/watched, while will require it's own separate table.
+    
 
     objects = ShowManager()
 

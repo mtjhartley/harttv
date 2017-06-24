@@ -16,7 +16,7 @@
         <h4>Premiere Date: {{show.premiered}}</h4>
         <h5>Network: {{show.network}}</h5>
         <img src="{{show.image_link}}" alt='show_image'>
-        {% for episode in show.episodes.all|slice:"3:8" %}
+        {% for episode in show.episodes.all|slice:":10" %}
             <p>Episode Title: {{episode.title}}</p>
             <p>Originally Aired: {{episode.airdate}}</p>
 
