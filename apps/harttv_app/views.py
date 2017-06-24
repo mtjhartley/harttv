@@ -26,7 +26,8 @@ def view_show(request, show_maze_id):
     print "*" * 50
     print "testing seasons and episodes"
     context = {
-        "show": show
+        "show": show,
+        "episodes": Episode.objects.filter(show__maze_id=show.maze_id).order_by('-season_number', '-episode_number')
     }
     
 

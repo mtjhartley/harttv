@@ -15,7 +15,10 @@ class ShowManager(models.Manager):
         showMap['description'] = show.summary
         showMap['status'] = show.status
         showMap['premiered'] = datetime.datetime.strptime(show.premiered, '%Y-%m-%d').date()
-        showMap['network'] = show.network.name
+        try:
+            showMap['network'] = show.network.name
+        except AttributeError:
+            showMap['network'] = ""
         showMap['image_link'] = show.image['original']
         showMap['maze_id'] = show.maze_id
 
@@ -61,11 +64,13 @@ class EpisodeManager(models.Manager):
         episodeMap['runtime'] = episode.runtime
         episodeMap['airdate'] = datetime.datetime.strptime(episode.airdate, '%Y-%m-%d').date()
         episodeMap['maze_id'] = episode.maze_id
+        episodeMap['episode_number'] = episode.episode_number
+        episodeMap['season_number'] = episode.season_number
         if episode.image:
             episodeMap['image_link'] = episode.image['original']
-            new_episode = Episode.objects.create(title=episodeMap['title'], show=episodeMap['show'], summary=episodeMap['summary'], runtime=episodeMap['runtime'], airdate=episodeMap['airdate'], image_link=episodeMap['image_link'],maze_id=episodeMap['maze_id'])
+            new_episode = Episode.objects.create(title=episodeMap['title'], show=episodeMap['show'], summary=episodeMap['summary'], runtime=episodeMap['runtime'], airdate=episodeMap['airdate'], image_link=episodeMap['image_link'],maze_id=episodeMap['maze_id'], episode_number=episodeMap['episode_number'], season_number=episodeMap['season_number'])
         else:
-            new_episode = Episode.objects.create(title=episodeMap['title'], show=episodeMap['show'], summary=episodeMap['summary'], runtime=episodeMap['runtime'], airdate=episodeMap['airdate'],maze_id=episode['maze_id'])
+            new_episode = Episode.objects.create(title=episodeMap['title'], show=episodeMap['show'], summary=episodeMap['summary'], runtime=episodeMap['runtime'], airdate=episodeMap['airdate'],maze_id=episode['maze_id'], episode_number=episodeMap['episode_number'], season_number=episodeMap['season_number'])
 
         
 
@@ -76,6 +81,8 @@ class Episode(models.Model):
     runtime = models.IntegerField()
     airdate = models.DateField()
     maze_id = models.IntegerField()
+    episode_number = models.IntegerField() 
+    season_number = models.IntegerField()
     image_link = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

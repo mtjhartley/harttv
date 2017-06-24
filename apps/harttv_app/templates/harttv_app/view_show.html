@@ -22,6 +22,12 @@
 
         {% endfor %} 
 
+        <br>
+        <p> other way of rendering eps</p>
+        {% for episode in episodes %}
+            <p>Episode Name: {{episode.title}} Episode Number: {{episode.episode_number}} Season Number: {{episode.season_number}}</p>
+            <p>Originally Aired: {{episode.airdate}}</p>
+        {% endfor %}
 
     </body>
 </html>
