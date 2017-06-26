@@ -28,6 +28,22 @@
             <p>Episode Name: {{episode.title}} Episode Number: {{episode.episode_number}} Season Number: {{episode.season_number}}</p>
             <p>Originally Aired: {{episode.airdate}}</p>
         {% endfor %}
+        <h2>Reviews: </h2>
+        {% for review in show.reviews.all %}
+            <p>{{review.user.first_name}}: {{review.title}}</p>
+            <p>{{review.text}}</p>
+            <p>{{review.rating}}</p>
+        {% endfor %}
+        <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
+            {% csrf_token %}
+            <label for='title'>Title:</label>
+            <input type='text' name='title'>
+            <label for='review'>Review:</label>
+            <textarea name='review'></textarea>
+            <label for='rating'>Rating: </label>
+            <input type='number' name='rating' min='0' max='10' value='5'>
+            <button type='submit'>Submit review!</button>
+        </form>
 
     </body>
 </html>

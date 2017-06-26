@@ -12,13 +12,13 @@ def register(request):
         if 'user' in userObject:
             request.session['id'] = userObject['user'].id 
             request.session['first_name'] = userObject['user'].first_name 
-            return redirect(reverse('harttv_index'))
+            return redirect(reverse('harttv:index'))
         else:
             for error in userObject['errors']:
                 messages.warning(request, error)
-            return redirect(reverse('index'))
+            return redirect(reverse('auth:index'))
     else:
-        return redirect('index')
+        return redirect('auth:index')
 
 def login(request):
     if request.method == 'POST':
@@ -26,8 +26,12 @@ def login(request):
         if 'user' in userObject:
             request.session['id'] = userObject['user'].id 
             request.session['first_name'] = userObject['user'].first_name
-            return redirect(reverse('harttv_index'))
+            return redirect(reverse('harttv:index'))
         else:
             for error in userObject['errors']:
                 messages.warning(request, error)
-            return redirect(reverse('index'))
+            return redirect(reverse('auth:index'))
+
+def logout(request):
+    request.session.clear()
+    return redirect(reverse('auth:index'))

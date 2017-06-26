@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 import pytvmaze
 import datetime
+from ..login_registration.models import User
 tvm = pytvmaze.TVMaze('mtjhartley')
 
 # Create your models here.
@@ -62,6 +63,7 @@ class EpisodeManager(models.Manager):
         episodeMap['show'] = Show.objects.get(id=show_id)
         episodeMap['summary'] = episode.summary 
         episodeMap['runtime'] = episode.runtime
+        #check if airdate is given
         episodeMap['airdate'] = datetime.datetime.strptime(episode.airdate, '%Y-%m-%d').date()
         episodeMap['maze_id'] = episode.maze_id
         episodeMap['episode_number'] = episode.episode_number
@@ -88,3 +90,13 @@ class Episode(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = EpisodeManager()
+
+#let's do reviews for Shows, and comments for episodes? sounds good. 
+class Review(models.Model):
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
+    show = models.ForeignKey(Show, related_name="reviews")
+    user = models.ForeignKey(User, related_name='reviews')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

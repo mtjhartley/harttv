@@ -1,11 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
-from .models import Show, Episode
+from .models import Show, Episode, Review
 import threading
 import pytvmaze
 from django.urls import reverse
+from ..login_registration.models import User
 tvm = pytvmaze.TVMaze('mtjhartley')
 # Create your views here.
-def harttv_index(request):
+def index(request):
     context = {}
     return render(request, 'harttv_app/index.html', context)
 
@@ -23,6 +24,7 @@ def view_show(request, show_maze_id):
             thread = threading.Thread(target=Episode.objects.createEpisode, args=(show.id, episode))
             thread.start()
             print "threading complete"
+        #thread.wait loop
     print "*" * 50
     print "testing seasons and episodes"
     context = {
@@ -79,9 +81,25 @@ def search_results(request):
     }
 
     return render (request, 'harttv_app/search_results.html', context)
+
+def handle_add_review(request, show_id):
+    if request.method == 'POST':
+        show = Show.objects.get(id=show_id)
+        user = User.objects.get(id=request.session['id'])
+        print show
+        print user
+
+        review_title = request.POST['title']
+        review_text = request.POST['review']
+        rating = request.POST['rating']
+        
+        new_review = Review.objects.create(title=review_title, text=review_text, rating=rating, user=user, show=show)
+
+        url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+        return HttpResponseRedirect(url)
     
 
 def delete_all_shows(request):
     Show.objects.all().delete()
     Episode.objects.all().delete()
-    return redirect(reverse('harttv_index'))
+    return redirect(reverse('harttv:index'))
