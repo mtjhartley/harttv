@@ -4,58 +4,56 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     </head>
     <body>
-        <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
-        <h2>This is a show's page</h2>
+        <div class='container'>
+            <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
+            <h2>This is a show's page</h2>
 
-        <h2>Show Name: {{show.title}}</h2>
-        <h3>Description: {{show.description}}</h3>
-        <h4>Status: {{show.status}}</h4>
-        <h4>Premiere Date: {{show.premiered}}</h4>
-        <h5>Network: {{show.network}}</h5>
-        <img src="{{show.image_link}}" alt='show_image'>
-        {% for episode in show.episodes.all|slice:":10" %}
-            <p>Episode Title: {{episode.title}}</p>
-            <p>Originally Aired: {{episode.airdate}}</p>
+            <h2>Show Name: {{show.title}}</h2>
+            <h3>Description: {{show.description}}</h3>
+            <h4>Status: {{show.status}}</h4>
+            <h4>Premiere Date: {{show.premiered}}</h4>
+            <h5>Network: {{show.network}}</h5>
+            <img src="{{show.image_link}}" alt='show_image'>
 
-        {% endfor %} 
 
-        <br>
-        <p> other way of rendering eps</p>
-        {% for episode in episodes %}
-            <p>Episode Name: {{episode.title}} Episode Number: {{episode.episode_number}} Season Number: {{episode.season_number}}</p>
-            <p>Originally Aired: {{episode.airdate}}</p>
-            <p>Picture: <img src="{{episode.image_link}}" alt="Ep Thumbnail"></p>
-        {% endfor %}
-        <h2>Reviews: </h2>
-        {% for review in show.reviews.all %}
-            <p>{{review.user.first_name}}: {{review.title}}</p>
-            <p>Content: {{review.text}}</p>
-            <p>Rating: {{review.rating}}</p>
-        {% endfor %}
-        <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
-            {% csrf_token %}
-            <label for='title'>Title:</label>
-            <input type='text' name='title'>
-            <label for='review'>Review:</label>
-            <textarea name='review'></textarea>
-            <label for='rating'>Rating: </label>
-            <input type='number' name='rating' min='0' max='10' value='5'>
-            <button type='submit'>Submit review!</button>
-        </form>
-        {% if not favorited %}
-        <form action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
-            {% csrf_token %}
-            <button type='submit'>Add to Favorites</button>
-        </form>
-        {% else %}
-        <form action="{% url 'harttv:handle_remove_favorite' show.id%}" method='post'>
-            {% csrf_token %}
-            <button type='submit'>Remove From Favorites</button>
-        </form>
-        {% endif %}
+            <br>
+            <h3>Episodes</h3>
+            {% for episode in episodes %}
+                <p>Episode Name: <a href="{% url 'harttv:view_episode' episode.id%}">{{episode.title}}</a> Episode Number: {{episode.episode_number}} Season Number: {{episode.season_number}}</p>
+                <p>Originally Aired: {{episode.airdate}}</p>
+                <p>Picture: <img src="{{episode.image_link}}" alt="Ep Thumbnail"></p>
+            {% endfor %}
+            <h2>Reviews: </h2>
+            {% for review in show.reviews.all %}
+                <p>{{review.user.first_name}}: {{review.title}}</p>
+                <p>Content: {{review.text}}</p>
+                <p>Rating: {{review.rating}}</p>
+            {% endfor %}
+            <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
+                {% csrf_token %}
+                <label for='title'>Title:</label>
+                <input type='text' name='title'>
+                <label for='review'>Review:</label>
+                <textarea name='review'></textarea>
+                <label for='rating'>Rating: </label>
+                <input type='number' name='rating' min='0' max='10' value='5'>
+                <button type='submit'>Submit review!</button>
+            </form>
+            {% if not favorited %}
+            <form action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
+                {% csrf_token %}
+                <button type='submit'>Add to Favorites</button>
+            </form>
+            {% else %}
+            <form action="{% url 'harttv:handle_remove_favorite' show.id%}" method='post'>
+                {% csrf_token %}
+                <button type='submit'>Remove From Favorites</button>
+            </form>
+            {% endif %}
+        </div>
 
 
     </body>

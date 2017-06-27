@@ -10,4 +10,8 @@ urlpatterns = [
     url(r'^show/(?P<show_id>\d+)/handle_add_review$', views.handle_add_review, name='handle_add_review'),
     url(r'^show/(?P<show_id>\d+)/handle_add_favorite$', views.handle_add_favorite, name='handle_add_favorite'),
     url(r'^show/(?P<show_id>\d+)/handle_remove_favorite$', views.handle_remove_favorite, name='handle_remove_favorite'),
+    url(r'^episode/(?P<episode_id>\d+)$', views.view_episode, name='view_episode'),
+    url(r'^episode/(?P<episode_id>\d+)/handle_add_episode_comment$', views.handle_add_episode_comment, name='handle_add_episode_comment'),
+    url(r'^episode/(?P<episode_id>\d+)/(?P<comment_id>\d+)handle_delete_episode_comment$', views.handle_delete_episode_comment, name='handle_delete_episode_comment'),
+    url(r'^episode/(?P<episode_id>\d+)/handle_update_episode_rating$', views.handle_update_episode_rating, name='handle_update_episode_rating'),
 ]

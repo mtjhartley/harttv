@@ -32,9 +32,6 @@ class ShowManager(models.Manager):
         #show info will be passed in as a variable, which is it's own class. navigate through the class
         #create this show map, and then use this map to clearly update the database!
 
-
-
-    
 class Show(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -90,12 +87,13 @@ class Episode(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     #favorites should be many to many. 1 user can fav many episodes, 1 ep can be faved by many users!
+    watched = models.ManyToManyField(User, related_name='watched_episodes')
     #watched could also be many to many, ez on or off switch for this one.
 
 
     objects = EpisodeManager()
 
-#let's do reviews for Shows, and comments for episodes? sounds good. 
+#let's do reviews for Shows, and comments/ratings for episodes? sounds good. 
 class Review(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
@@ -104,3 +102,36 @@ class Review(models.Model):
     user = models.ForeignKey(User, related_name='reviews')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+#Show Comments are what users leave on episode pages
+
+class EpisodeCommentManager(models.Manager):
+    def isValidComment(self, commentInfo, episode_id, user):
+        episode = Episode.objects.get(id=episode_id)
+        validComment = True
+        commentObject = {
+            'errors': [],
+        }
+        if len(commentInfo['comment']) < 10:
+            commentObject['errors'].append("Comment must be at least 10 characters.")
+            validComment = False
+        if validComment:
+            new_comment = EpisodeComment.objects.create(comment=commentInfo['comment'], episode=episode, user=user)
+            commentObject['new_comment'] = new_comment
+        return commentObject
+        
+class EpisodeComment(models.Model):
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    episode = models.ForeignKey(Episode, related_name='episode_comments')
+    user = models.ForeignKey(User, related_name='users_episode_comments')
+
+    objects = EpisodeCommentManager()
+
+class EpisodeRating(models.Model):
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    episode = models.ForeignKey(Episode, related_name='episode_ratings')
+    user = models.ForeignKey(User, related_name='user_episode_ratings')

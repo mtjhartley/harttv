@@ -1,14 +1,24 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
-from .models import Show, Episode, Review
+from .models import Show, Episode, Review, EpisodeComment, EpisodeRating
 import threading
 import pytvmaze
 from django.urls import reverse
+from django.contrib import messages
 from ..login_registration.models import User
 tvm = pytvmaze.TVMaze('mtjhartley')
 # Create your views here.
+
+def generate_rating_options():
+    ratings = [1,2,3,4,5,6,7,8,9,10]
+    ratings_strings = ["(1) Appalling", "(2) Atrocious", "(3) Very Bad", "(4) No Good", "(5) Alright", "(6) Good", "(7) Enjoyable", "(8) Great", "(9) Amazing", "(10) Swag Me Out!"]
+    rating_options = zip(ratings, ratings_strings)
+    return rating_options
+
+
 def index(request):
     context = {}
     return render(request, 'harttv_app/index.html', context)
+
 
 def view_show(request, show_maze_id):
     user = User.objects.get(id=request.session['id'])
@@ -26,6 +36,7 @@ def view_show(request, show_maze_id):
             print "threading"
             thread = threading.Thread(target=Episode.objects.createEpisode, args=(show.id, episode))
             thread.start()
+            thread.join()
             print "threading complete"
         #thread.wait loop
     print "*" * 50
@@ -59,6 +70,7 @@ def view_show(request, show_maze_id):
 
     
     return render(request, 'harttv_app/view_show.html', context)
+
 
 def test_search_bar(request):
     return render(request, 'harttv_app/search.html')        
@@ -133,7 +145,75 @@ def handle_remove_favorite(request, show_id):
         user.users_favorites.remove(show)
         url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
         return HttpResponseRedirect(url)
+
+def view_episode(request, episode_id):
+    user = User.objects.get(id=request.session['id'])
+    episode = Episode.objects.get(id=episode_id)
+    show = Show.objects.get(id=episode.show.id)
+    comments = EpisodeComment.objects.filter(episode=episode)
+    ratings_options = generate_rating_options()
+    if len(EpisodeRating.objects.filter(episode=episode, user=user)) > 0:
+        rating = EpisodeRating.objects.get(episode=episode, user=user).rating
+    else:
+        rating = None
+    print "printing rating", rating
+    print comments
+    context = {
+        "show": show,
+        "episode": episode,
+        "comments": comments,
+        "current_rating" : rating,
+        "options": ratings_options
+
+    }
+    return render(request, 'harttv_app/view_episode.html', context)
+
+def handle_add_episode_comment(request, episode_id):
+    print "*" * 50
+    print request.method
+    user = User.objects.get(id=request.session['id'])
+    if request.method == 'POST':
+        print "post is happening"
+        print "request.POST"
+        print request.POST
+        episodeCommentObject = EpisodeComment.objects.isValidComment(request.POST, episode_id, user)
+        if 'new_comment' in episodeCommentObject:
+            url = reverse('harttv:view_episode', kwargs={'episode_id': episode_id})
+            return HttpResponseRedirect(url)
+        else:
+            for error in episodeCommentObject['errors']:
+                messages.warning(request, error)
+            url = reverse('harttv:view_episode', kwargs={'episode_id': episode_id})
+            return HttpResponseRedirect(url)
+    else:
+        return redirect(reverse('harttv:index'))
+
+def handle_delete_episode_comment(request, episode_id, comment_id):
+    if request.method == 'POST':
+        episode = Episode.objects.get(id=episode_id)
+        user = User.objects.get(id=request.session['id'])
+        EpisodeComment.objects.filter(episode=episode, user=user, id=comment_id).delete()
+
+        url = reverse('harttv:view_episode', kwargs={'episode_id': episode_id})
+        return HttpResponseRedirect(url)
+    
+
         
+def handle_update_episode_rating(request, episode_id):
+    user = User.objects.get(id=request.session['id'])
+    episode = Episode.objects.get(id=episode_id)
+    existing_rating = EpisodeRating.objects.filter(user=user, episode=episode)
+    if existing_rating:
+        existing_rating[0].rating = int(request.POST['rating'])
+        existing_rating[0].save()
+    else:
+        EpisodeRating.objects.create(user=user, episode=episode, rating=int(request.POST['rating']))
+    url = reverse('harttv:view_episode', kwargs={'episode_id': episode_id})
+    return HttpResponseRedirect(url)
+    
+
+
+    
 
 def delete_all_shows(request):
     Show.objects.all().delete()
