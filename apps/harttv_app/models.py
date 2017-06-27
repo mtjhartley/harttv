@@ -90,6 +90,7 @@ class Episode(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     #favorites should be many to many. 1 user can fav many episodes, 1 ep can be faved by many users!
+    #watched could also be many to many, ez on or off switch for this one.
 
 
     objects = EpisodeManager()

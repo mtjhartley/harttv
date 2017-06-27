@@ -45,7 +45,7 @@
             <input type='number' name='rating' min='0' max='10' value='5'>
             <button type='submit'>Submit review!</button>
         </form>
-        {% if favorited %}
+        {% if not favorited %}
         <form action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
             {% csrf_token %}
             <button type='submit'>Add to Favorites</button>
