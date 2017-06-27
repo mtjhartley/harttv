@@ -11,10 +11,13 @@ def index(request):
     return render(request, 'harttv_app/index.html', context)
 
 def view_show(request, show_maze_id):
+    user = User.objects.get(id=request.session['id'])
     if len(Show.objects.filter(maze_id=show_maze_id)) == 1:
         show = Show.objects.get(maze_id=show_maze_id)
+        print "show is already in the database"
     else: #show is NOT in the database
         show = Show.objects.createShow(maze_id=show_maze_id)
+        print "show is not in the database"
         #threading code to add episodes to db if first time visiting page
         iterate_show = tvm.get_show(maze_id=show.maze_id, embed='episodes')
         print iterate_show.name
@@ -27,9 +30,23 @@ def view_show(request, show_maze_id):
         #thread.wait loop
     print "*" * 50
     print "testing seasons and episodes"
+
+    #if show is in users favorites, context favorited : True
+    #else context favorited: False
+    print show.favorite.filter(id=user.id)
+
+
+
+    if show.favorite.filter(id=user.id):
+        favorited = False
+    else:
+        favorited = True
+    #favorited = user.show_set.filter(maze_id=show_maze_id).exists() == True
+
     context = {
         "show": show,
-        "episodes": Episode.objects.filter(show__maze_id=show.maze_id).order_by('-season_number', '-episode_number')
+        "episodes": Episode.objects.filter(show__maze_id=show.maze_id).order_by('-season_number', '-episode_number'),
+        "favorited": favorited,
     }
     
 
@@ -97,7 +114,29 @@ def handle_add_review(request, show_id):
 
         url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
         return HttpResponseRedirect(url)
-    
+
+def handle_add_favorite(request, show_id):
+    if request.method == 'POST':
+        show = Show.objects.get(id=show_id)
+        user = User.objects.get(id=request.session['id'])
+
+        user.users_favorites.add(show) #matches related name
+        print "printing show.favorite.all()"
+        print show.favorite.all()
+
+        url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+        #redirect to users page, maybe their favorites page!
+        return HttpResponseRedirect(url)
+
+def handle_remove_favorite(request, show_id):
+    if request.method == 'POST':
+        show = Show.objects.get(id=show_id)
+        user = User.objects.get(id=request.session['id'])
+
+        user.users_favorites.remove(show)
+        url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+        return HttpResponseRedirect(url)
+        
 
 def delete_all_shows(request):
     Show.objects.all().delete()

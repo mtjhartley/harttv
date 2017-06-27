@@ -45,6 +45,7 @@ class Show(models.Model):
     maze_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    favorite = models.ManyToManyField(User, related_name='users_favorites')
     #let's add a many to many field here for FAVORITES 1 user many favorite shows, 1 show can be favorited bym any users. 
     #this will be distinct from currently watching/watched, while will require it's own separate table.
     
@@ -88,6 +89,8 @@ class Episode(models.Model):
     image_link = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    #favorites should be many to many. 1 user can fav many episodes, 1 ep can be faved by many users!
+
 
     objects = EpisodeManager()
 

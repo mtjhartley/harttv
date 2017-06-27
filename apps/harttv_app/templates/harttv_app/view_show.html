@@ -27,12 +27,13 @@
         {% for episode in episodes %}
             <p>Episode Name: {{episode.title}} Episode Number: {{episode.episode_number}} Season Number: {{episode.season_number}}</p>
             <p>Originally Aired: {{episode.airdate}}</p>
+            <p>Picture: <img src="{{episode.image_link}}" alt="Ep Thumbnail"></p>
         {% endfor %}
         <h2>Reviews: </h2>
         {% for review in show.reviews.all %}
             <p>{{review.user.first_name}}: {{review.title}}</p>
-            <p>{{review.text}}</p>
-            <p>{{review.rating}}</p>
+            <p>Content: {{review.text}}</p>
+            <p>Rating: {{review.rating}}</p>
         {% endfor %}
         <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
             {% csrf_token %}
@@ -44,6 +45,18 @@
             <input type='number' name='rating' min='0' max='10' value='5'>
             <button type='submit'>Submit review!</button>
         </form>
+        {% if favorited %}
+        <form action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
+            {% csrf_token %}
+            <button type='submit'>Add to Favorites</button>
+        </form>
+        {% else %}
+        <form action="{% url 'harttv:handle_remove_favorite' show.id%}" method='post'>
+            {% csrf_token %}
+            <button type='submit'>Remove From Favorites</button>
+        </form>
+        {% endif %}
+
 
     </body>
 </html>
