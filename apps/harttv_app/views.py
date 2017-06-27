@@ -36,12 +36,9 @@ def view_show(request, show_maze_id):
     print show.favorite.filter(id=user.id)
 
 
-
-    if show.favorite.filter(id=user.id):
-        favorited = True
-    else:
-        favorited = False
-    #favorited = user.show_set.filter(maze_id=show_maze_id).exists() == True
+    favorited = len(show.favorite.filter(id=user.id)) > 0 
+    #return true or false if favorited
+    print favorited
 
     context = {
         "show": show,
