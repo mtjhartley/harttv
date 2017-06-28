@@ -1,9 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
-from .models import Show, Episode, Review, EpisodeComment, EpisodeRating
-import threading
-import pytvmaze
 from django.urls import reverse
 from django.contrib import messages
+from django.db.models import Count
+from .models import Show, Episode, Review, EpisodeComment, EpisodeRating, ShowRating
+import datetime
+import pytvmaze
+import threading
+
 from ..login_registration.models import User
 tvm = pytvmaze.TVMaze('mtjhartley')
 # Create your views here.
@@ -41,20 +44,30 @@ def view_show(request, show_maze_id):
         #thread.wait loop
     print "*" * 50
     print "testing seasons and episodes"
+    print User.get_rating(user, show.id)
 
     #if show is in users favorites, context favorited : True
     #else context favorited: False
     print show.favorite.filter(id=user.id)
 
-
+    #refactor toShowReview nad ShowRating
+    if len(ShowRating.objects.filter(show=show, user=user)) > 0:
+        rating = ShowRating.objects.get(show=show, user=user).rating
+    else:
+        rating = None
+    
     favorited = len(show.favorite.filter(id=user.id)) > 0 
     #return true or false if favorited
     print favorited
-
+    ratings_options = generate_rating_options()
+    episodes = Episode.objects.filter(show__maze_id=show.maze_id).order_by('-season_number', '-episode_number')
     context = {
         "show": show,
-        "episodes": Episode.objects.filter(show__maze_id=show.maze_id).order_by('-season_number', '-episode_number'),
+        "episodes": episodes,
+        "num_episodes": len(episodes),
         "favorited": favorited,
+        "options": ratings_options,
+        "current_rating": rating,
     }
     
 
@@ -76,7 +89,8 @@ def test_search_bar(request):
     return render(request, 'harttv_app/search.html')        
 
 def search_results(request):
-    search_string = request.GET['show_search'].strip().lower() #check if tvmaze is case sensitive
+    search = request.GET['show_search']
+    search_string = search.strip().lower() #check if tvmaze is case sensitive
     print "*" * 50
     print search_string
     searchShows = pytvmaze.get_show_list(search_string)
@@ -95,7 +109,15 @@ def search_results(request):
         showDict = {}
         showDict['name'] = show.name
         showDict['maze_id'] = show.maze_id
-        showDict['description'] = show.summary
+        summary_array = show.summary.split(" ")
+        showDict['description'] = ' '.join([x for x in summary_array[:100]]) + '...'
+        if show.premiered:
+            print show.premiered
+            showDict['airdate'] = datetime.datetime.strptime(show.premiered, '%Y-%m-%d').date()
+        if show.network:
+            showDict['network'] = show.network.name
+        else:
+            showDict['network'] = 'N/A'
         if show.image:
             showDict['image'] = show.image['original']
         show_list.append(showDict)
@@ -104,25 +126,59 @@ def search_results(request):
     context = {
         #"searchShows": searchShows,
         "contextShow": show_list,
+        "search": search,
     }
 
     return render (request, 'harttv_app/search_results.html', context)
 
+# def handle_update_show_rating(request, show_id):
+#     user = User.objects.get(id=request.session['id'])
+#     show = Show.objects.get(id=show_id)
+#     existing_rating = ShowRating.objects.filter(user=user, show=show)
+#     if existing_rating:
+#         existing_rating[0].rating = int(request.POST['rating'])
+#         existing_rating[0].save()
+#     else:
+#         ShowRating.objects.create(user=user, show=show, rating=int(request.POST['rating']))
+#     url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+#     return HttpResponseRedirect(url)
+
+#refactor to review.model manager later. 
 def handle_add_review(request, show_id):
     if request.method == 'POST':
         show = Show.objects.get(id=show_id)
         user = User.objects.get(id=request.session['id'])
         print show
         print user
-
         review_title = request.POST['title']
-        review_text = request.POST['review']
-        rating = request.POST['rating']
-        
-        new_review = Review.objects.create(title=review_title, text=review_text, rating=rating, user=user, show=show)
+        review_text = request.POST['review']  
+        existing_rating = ShowRating.objects.filter(user=user, show=show)
+        if len(review_title) == 0 and len(review_text) == 0:
+            if existing_rating:
+                existing_rating[0].rating = int(request.POST['rating'])
+                existing_rating[0].save()
+                rating = existing_rating[0]
+            else:
+                rating = ShowRating.objects.create(user=user, show=show, rating=int(request.POST['rating']))
+            url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+            return HttpResponseRedirect(url)
+        else:
+            if existing_rating:
+                existing_rating[0].rating = int(request.POST['rating'])
+                existing_rating[0].save()
+                rating = existing_rating[0]
+            else:
+                rating = ShowRating.objects.create(user=user, show=show, rating=int(request.POST['rating']))
+            Review.objects.create(title=review_title, text=review_text,user=user, show=show, rating=rating)
+            url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+            return HttpResponseRedirect(url)
 
-        url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
-        return HttpResponseRedirect(url)
+            
+            
+            
+
+
+
 
 def handle_add_favorite(request, show_id):
     if request.method == 'POST':

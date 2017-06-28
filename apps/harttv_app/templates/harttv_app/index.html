@@ -4,10 +4,11 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
     </head>
     <body>
-        <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
+        <h1>Hello <a href="{% url 'dashboard:show_user' request.session.id %}">{{request.session.first_name}}</a>! Welcome to HartTV</h1>
         <a href="{% url 'harttv:test_search_bar' %}">Search!</a>
         
 

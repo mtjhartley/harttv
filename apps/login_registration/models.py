@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-
 from django.db import models
 import datetime
 import re
@@ -80,6 +79,15 @@ class UserManager(models.Manager):
 
 
 class User(models.Model):
+    def get_rating(self, show_id):
+        ratings = self.user_show_ratings.all()
+        for rating in ratings:
+            if rating.show.id == show_id:
+                return rating.rating
+            else:
+                print "couldn't find a rating for this show."
+                return False
+        
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)

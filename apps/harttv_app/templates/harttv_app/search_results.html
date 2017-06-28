@@ -4,19 +4,44 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
     </head>
     <body>
-        <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
-        <a href="{% url 'harttv:test_search_bar' %}">Search!</a>
-        <h2>Here are your search results</h2>
-        {% for show in contextShow %}
-            <img src="{{show.image}}" style="width: 200px; height: 200px;">
-            <h3><a href="{% url 'harttv:view_show' show_maze_id=show.maze_id %}">{{show.name}}</a></h3>
-            <p>{{show.description}}</p>
-  
-            
-        {% endfor %}
+        <div class='container-fluid'>
+
+            <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
+            <form action="{% url 'harttv:search_results' %}">
+                <input type="text" class="form-control" placeholder="Search again" name="show_search">
+                <button class="btn btn-default" type="submit">Search!</button>
+            </form>
+            <h2>Search Results for "{{search}}"</h2>
+            <table class='table table-hover'>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Network</th>
+                        <th>Premiered</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for show in contextShow %}
+                    <tr>
+                        <td>{{show.maze_id}}</td>
+                        <td><a href="{% url 'harttv:view_show' show_maze_id=show.maze_id %}">{{show.name}}</a></td>
+                        <td><img src="{{show.image}}" style="width: 150px; height: 150px;"></td>
+                        <td>{{show.network}}</td>
+                        <td>{{show.airdate|date:"Y"}}</td>
+                        <td>{{show.description}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
 
         
 

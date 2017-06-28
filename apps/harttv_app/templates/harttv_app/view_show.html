@@ -4,19 +4,94 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        {% load static %}
+        <link href="{% static 'harttv_app/css/style.css' %}" rel="stylesheet">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
         <div class='container'>
             <h1>Hello {{request.session.first_name}}! Welcome to HartTV</h1>
-            <h2>This is a show's page</h2>
+            <form action="{% url 'harttv:search_results' %}">
+                <input type="text" class="form-control" placeholder="Search again" name="show_search">
+                <button class="btn btn-default" type="submit">Search!</button>
+            </form>
 
-            <h2>Show Name: {{show.title}}</h2>
-            <h3>Description: {{show.description}}</h3>
-            <h4>Status: {{show.status}}</h4>
-            <h4>Premiere Date: {{show.premiered}}</h4>
-            <h5>Network: {{show.network}}</h5>
-            <img src="{{show.image_link}}" alt='show_image'>
+            <div class="row">
+                <div class="col-sm-4" style="background-color:lavender;">.col-sm-4
+                    <h2>Show Name: {{show.title}}</h2>
+                    <img src="{{show.image_link}}" alt='show_image' style="width:300px; height:450px;">
+                    <table class='table'>
+                        <thead>
+                            <!--<tr>
+                                <td>Attribute</td>
+                                <td>Data</td>
+                            </tr>-->
+                        </thead>
+                        <tbody>
+                            <h3 class='show_info_column_header'>Information</h3>
+                            <tr>
+                                <th>Episodes</th>
+                                <th>{{num_episodes}}</th>
+
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <th>{{show.status}}</th>
+                            </tr>
+                            <tr>
+                                <th>Preimere Date</th>
+                                <th>{{show.premiered}}</th>
+                            </tr>
+                            <tr>
+                                <th>Network</th>
+                                <th>{{show.network}}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3 class='show_info_column_header'>Information</h3>
+                    <div class="spaceit">
+                        <span class="dark_text">Episodes:</span> {{num_episodes}}
+                        
+                    </div>
+                    <div class="spaceit">
+                        <span class="dark_text">Status:</span> {{show.status}}
+                    </div>
+                    <div class="spaceit">
+                        <span class="dark_text">Premiere Date:</span> {{show.premiered}}
+                    </div>
+                    <div class="spaceit">
+                        <span class="dark_text">Network:</span> {{show.network}}
+                    </div>
+
+
+
+
+
+
+                </div>
+                <div class="col-sm-8" style="background-color:lavenderblush;">.col-sm-8
+                    <p>Description: {{show.description}}</p>
+                    <div class="row">
+                        <div class="col-sm-6" style="background-color:lightcyan;">.col-sm-6</div>
+                        <div class="col-sm-6" style="background-color:lightgray;">.col-sm-6</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3" style="background-color:lightcyan;">.col-sm-3</div>
+                        <div class="col-sm-3" style="background-color:lightgray;">.col-sm-3</div>
+                        <div class="col-sm-3" style="background-color:lightcyan;">.col-sm-3</div>
+                        <div class="col-sm-3" style="background-color:lightgray;">.col-sm-3</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" style="background-color:lightcyan;">.col-sm-4</div>
+                        <div class="col-sm-4" style="background-color:lightgray;">.col-sm-4</div>
+                        <div class="col-sm-4" style="background-color:lightcyan;">.col-sm-4</div>
+
+                    </div>
+                </div>
+            </div>
+
+
 
 
             <br>
@@ -30,7 +105,7 @@
             {% for review in show.reviews.all %}
                 <p>{{review.user.first_name}}: {{review.title}}</p>
                 <p>Content: {{review.text}}</p>
-                <p>Rating: {{review.rating}}</p>
+                <p>Rating: {{review.rating.rating}}</p>
             {% endfor %}
             <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
                 {% csrf_token %}
@@ -38,10 +113,25 @@
                 <input type='text' name='title'>
                 <label for='review'>Review:</label>
                 <textarea name='review'></textarea>
-                <label for='rating'>Rating: </label>
-                <input type='number' name='rating' min='0' max='10' value='5'>
-                <button type='submit'>Submit review!</button>
+                <div class='form-group'>
+                    <label for="rating">Rating:</label>
+                    <select name='rating'>
+                        {% if current_rating %}
+                            {% for option in options %}
+                                <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
+                            {% endfor %}
+                        {% else %}
+                                <option selected disabled>Select</option>
+                            {% for option in options %}
+                                <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
+                            {% endfor %}
+                        {% endif %}                
+                    </select>
+                    <button class='btn btn-default' type='submit'>Submit Rating</button>
+                    <!-- would be a great time to use ajax!!!-->
+                </div>
             </form>
+
             {% if not favorited %}
             <form action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
                 {% csrf_token %}
@@ -55,6 +145,6 @@
             {% endif %}
         </div>
 
-
+    </div>
     </body>
 </html>

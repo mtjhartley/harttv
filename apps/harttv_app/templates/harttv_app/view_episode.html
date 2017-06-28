@@ -26,10 +26,17 @@
                 <div class='form-group'>
                     <label for="rating">Rating:</label>
                     <select name='rating'>
-                        
-                        {% for option in options %}
-                            <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
-                        {% endfor %}
+                        {% if current_rating %}
+                            {% for option in options %}
+                                <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
+                            {% endfor %}
+                        {% else %}
+                                <option selected disabled>Select</option>
+                            {% for option in options %}
+                                <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
+                            {% endfor %}
+                        {% endif %}
+                                
                     </select>
 
                     <button class='btn btn-default' type='submit'>Submit Rating</button>

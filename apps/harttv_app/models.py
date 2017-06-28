@@ -94,15 +94,23 @@ class Episode(models.Model):
     objects = EpisodeManager()
 
 #let's do reviews for Shows, and comments/ratings for episodes? sounds good. 
+
+
+class ShowRating(models.Model):
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    show = models.ForeignKey(Show, related_name='show_ratings')
+    user = models.ForeignKey(User, related_name='user_show_ratings')
+    
 class Review(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
-    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     show = models.ForeignKey(Show, related_name="reviews")
     user = models.ForeignKey(User, related_name='reviews')
+    rating = models.ForeignKey(ShowRating, related_name="reviews")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 #Show Comments are what users leave on episode pages
 
 class EpisodeCommentManager(models.Manager):

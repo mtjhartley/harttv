@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('apps.harttv_app.urls', namespace='harttv')),
     url(r'^', include('apps.login_registration.urls', namespace='auth')),
+    url(r'^users/', include('apps.dashboard.urls', namespace='dashboard')),
 ]
