@@ -60,11 +60,11 @@ def view_show(request, show_maze_id):
     #return true or false if favorited
     print favorited
     ratings_options = generate_rating_options()
-    episodes = Episode.objects.filter(show__maze_id=show.maze_id).order_by('-season_number', '-episode_number')
+    episodes = Episode.objects.filter(show__maze_id=show.maze_id).annotate(number_eps=Count('show__episodes')).order_by('-season_number', '-episode_number')
     context = {
         "show": show,
         "episodes": episodes,
-        "num_episodes": len(episodes),
+        "num_episodes": len(episodes), #can probably do with...Episode.objects.filter(show__episodes.)
         "favorited": favorited,
         "options": ratings_options,
         "current_rating": rating,
@@ -109,8 +109,9 @@ def search_results(request):
         showDict = {}
         showDict['name'] = show.name
         showDict['maze_id'] = show.maze_id
-        summary_array = show.summary.split(" ")
-        showDict['description'] = ' '.join([x for x in summary_array[:100]]) + '...'
+        if show.summary:
+            summary_array = show.summary.split(" ")
+            showDict['description'] = ' '.join([x for x in summary_array[:100]]) + '...'
         if show.premiered:
             print show.premiered
             showDict['airdate'] = datetime.datetime.strptime(show.premiered, '%Y-%m-%d').date()
