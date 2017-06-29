@@ -10,52 +10,69 @@
         <div class='container-fluid'>
             <a href="{% url 'dashboard:index' %}">E.T. Phone Home</a>
             <h1>Edit User # {{user.id}}</h1>
-            <div class='col-md-6'>
-                <h2>Edit Information</h2>
-                <form action="{% url 'dashboard:update_user' user_id=user.id %}" method='post'>
-                    {% csrf_token %}
-                    <div class='form-group'>
-                        <label for='email'>Email: </label>
-                        <input type='text' name='email' id='email' class='form-control' value="{{user.email}}">
-                    </div>
-                    <div class='form-group'>
-                        <label for='first_name'>First Name: </label>
-                        <input type='text' name='first_name' id='first_name' class='form-control' value="{{user.first_name}}">
-                    </div>
-                    <div class="form-group">
-                        <label for='last_name'>Last Name: </label>
-                        <input type='text' name='last_name' id='last_name' class='form-control' value="{{user.last_name}}">
-                    </div>
+            <div class='row'>
+                <div class='col-md-6'>
+                    <h2>Edit Information</h2>
+                    <form action="{% url 'dashboard:update_user' user_id=user.id %}" method='post'>
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <label for='email'>Email: </label>
+                            <input type='text' name='email' id='email' class='form-control' value="{{user.email}}">
+                        </div>
+                        <div class='form-group'>
+                            <label for='first_name'>First Name: </label>
+                            <input type='text' name='first_name' id='first_name' class='form-control' value="{{user.first_name}}">
+                        </div>
+                        <div class="form-group">
+                            <label for='last_name'>Last Name: </label>
+                            <input type='text' name='last_name' id='last_name' class='form-control' value="{{user.last_name}}">
+                        </div>
 
-                    {% if boolean %}
-                    <div class="form-group">
-                        <select name='admin'>
-                            <option value='False'>Normal</option>
-                            <option value='True'>Admin</option>
-                        </select>
-                    </div>
-                    {% endif %}
-                    
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
+                        {% if boolean %}
+                        <div class="form-group">
+                            <select name='admin'>
+                                <option value='False'>Normal</option>
+                                <option value='True' selected>Admin</option>
+                            </select>
+                        </div>
+                        {% endif %}
+                        
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
 
+                </div>
+                <div class='col-md-6'>
+                    <h2>Change Password</h2>
+                    <form action="{% url 'dashboard:update_user' user.id %}" method='post'>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for='password'>Password: </label>
+                            <input type='password' name='password' id='password' class='form-control' placeholder="Password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for='confirm_password'>Confirm Password: </label>
+                            <input type='password' name='confirm_password' id='confirm_password' class='form-control' placeholder="Confirm Password">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div>
             </div>
-            <div class='col-md-6'>
-                <h2>Change Password</h2>
-                <form action="{% url 'dashboard:update_user' user.id %}" method='post'>
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for='password'>Password: </label>
-                        <input type='password' name='password' id='password' class='form-control' placeholder="Password">
-                    </div>
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h2>Update Description</h2>
+                    <form action="{% url 'dashboard:update_user_description' user.id %}" method='post'>
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <textarea style="max-width: 60%;" name='description' class='form-control'>{{description.description_text}}</textarea>
+                            <button type="submit" class="btn btn-default">Update</button>
+                            
+                        </div>
+                    </form>
 
-                    <div class="form-group">
-                        <label for='confirm_password'>Confirm Password: </label>
-                        <input type='password' name='confirm_password' id='confirm_password' class='form-control' placeholder="Confirm Password">
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
+                </div>
             </div>
+            
             
 
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from ..login_registration.models import User
-from .models import Message, Comment
+from .models import Message, Comment, Description
 from ..harttv_app.models import Show
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -39,11 +39,17 @@ def edit_user(request, user_id):
     print user_id
     user = User.objects.get(id=user_id)
 
+        
+
     admin_user = User.objects.get(id=request.session['id'])
     context = {
         "user": user,
         "boolean": admin_user.admin,
     }
+
+    description = Description.objects.filter(user=user)
+    if len(description) > 0:
+        context['description'] = description[0]
     if admin_user.admin or int(user_id) == request.session['id']:
         print user.admin
         print "i'm an admin"
@@ -74,6 +80,20 @@ def update_user(request, user_id):
     # do password change
     #else do information change.
     return redirect(reverse('dashboard:index'))
+
+def update_user_description(request, user_id):
+    user = User.objects.get(id=user_id)
+    description = Description.objects.filter(user=user)
+    if request.method == 'POST':
+        if len(description) > 0:
+            Description.objects.filter(user=user).update(description_text=request.POST['description'])
+        else:
+            Description.objects.create(description_text=request.POST['description'], user=user)
+    return redirect(reverse('dashboard:index'))
+    
+        
+    
+    
 
 def destroy_user(request, user_id):
     current_user = User.objects.get(id=request.session['id'])

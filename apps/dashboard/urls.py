@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^create$', views.create_user, name='create_user'),
     url(r'^edit/(?P<user_id>\d+)/$', views.edit_user, name='edit_user'),
     url(r'^update/(?P<user_id>\d+)/$', views.update_user, name='update_user'),
+    url(r'^update/(?P<user_id>\d+)/description$', views.update_user_description, name='update_user_description'),
     url(r'^destroy_user/(?P<user_id>\d+)$', views.destroy_user, name='destroy_user'),
     url(r'^show/(?P<user_id>\d+)$', views.show_user, name='show_user'),
     url(r'^create_message/(?P<wall_id>\d+)$', views.create_message, name='create_message'),

@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Avg
 from .models import Show, Episode, Review, EpisodeComment, EpisodeRating, ShowRating
 import datetime
 import pytvmaze
@@ -21,6 +21,12 @@ def generate_rating_options():
 def index(request):
     context = {}
     return render(request, 'harttv_app/index.html', context)
+
+def view_all_shows(request):
+    context = {
+        "shows": Show.objects.all().order_by('title')
+    }
+    return render(request, 'harttv_app/all_shows.html', context)
 
 
 def view_show(request, show_maze_id):
@@ -59,15 +65,26 @@ def view_show(request, show_maze_id):
     favorited = len(show.favorite.filter(id=user.id)) > 0 
     #return true or false if favorited
     print favorited
+    show_average_rating = ShowRating.objects.filter(show=show).aggregate(Avg('rating'))
+    show_num_users_rated = len(ShowRating.objects.filter(show=show))
+    print 'printing average_rating'
+    print show_average_rating
+    print 
+    print "how many users have favorited this show: "
+    print show.favorite.all().count()
     ratings_options = generate_rating_options()
-    episodes = Episode.objects.filter(show__maze_id=show.maze_id).annotate(number_eps=Count('show__episodes')).order_by('-season_number', '-episode_number')
+    episodes = Episode.objects.filter(show__maze_id=show.maze_id).annotate(number_eps=Count('show__episodes')).order_by('season_number', 'episode_number')
     context = {
         "show": show,
         "episodes": episodes,
+        "recent_episodes": episodes[:6],
         "num_episodes": len(episodes), #can probably do with...Episode.objects.filter(show__episodes.)
         "favorited": favorited,
         "options": ratings_options,
         "current_rating": rating,
+        "show_average_rating": show_average_rating['rating__avg'],
+        "show_num_users_rated": show_num_users_rated,
+        "favorites": show.favorite.all().count(),
     }
     
 
@@ -210,17 +227,41 @@ def view_episode(request, episode_id):
     comments = EpisodeComment.objects.filter(episode=episode)
     ratings_options = generate_rating_options()
     if len(EpisodeRating.objects.filter(episode=episode, user=user)) > 0:
-        rating = EpisodeRating.objects.get(episode=episode, user=user).rating
+        episode_rating = EpisodeRating.objects.get(episode=episode, user=user).rating
     else:
-        rating = None
-    print "printing rating", rating
+        episode_rating = None
+    if len(ShowRating.objects.filter(show=show, user=user)) > 0:
+        show_rating = ShowRating.objects.get(show=show, user=user).rating
+    else:
+        show_rating = None
+    print "*" * 50
+    print show_rating
+    episodes = Episode.objects.filter(show__maze_id=show.maze_id).annotate(number_eps=Count('show__episodes')).order_by('season_number', 'episode_number')
     print comments
+    favorited = len(show.favorite.filter(id=user.id)) > 0 
+    show_average_rating = ShowRating.objects.filter(show=show).aggregate(Avg('rating'))
+    show_num_users_rated = len(ShowRating.objects.filter(show=show))
+    episode_average_rating = EpisodeRating.objects.filter(episode=episode).aggregate(Avg('rating'))
+    episode_num_users_rated = len(EpisodeRating.objects.filter(episode=episode))
+    print 'printing average_rating'
+    print show_average_rating
+    print 
+    print "how many users have favorited this show: "
+    print show.favorite.all().count()
     context = {
         "show": show,
         "episode": episode,
+        "num_episodes": len(episodes),    
         "comments": comments,
-        "current_rating" : rating,
-        "options": ratings_options
+        "episode_rating" : episode_rating,
+        "current_rating" : show_rating,
+        "options": ratings_options,
+        "favorited": favorited,
+        "show_average_rating": show_average_rating['rating__avg'],
+        "show_num_users_rated": show_num_users_rated,
+        "favorites": show.favorite.all().count(),
+        "episode_average_rating": episode_average_rating['rating__avg'],
+        "episode_num_users_rated": episode_num_users_rated,
 
     }
     return render(request, 'harttv_app/view_episode.html', context)

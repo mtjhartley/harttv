@@ -19,5 +19,6 @@ class Comment(models.Model):
 
 class Description(models.Model):
     description_text = models.TextField(max_length=1024)
+    user = models.OneToOneField(User, on_delete=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
