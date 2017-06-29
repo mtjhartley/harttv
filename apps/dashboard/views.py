@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from ..login_registration.models import User
 from .models import Message, Comment, Description
-from ..harttv_app.models import Show
+from ..harttv_app.models import Show, ShowRating, Review
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import bcrypt
@@ -104,10 +104,13 @@ def destroy_user(request, user_id):
 
 def show_user(request, user_id):
     user = User.objects.get(id=user_id)
+    description = Description.objects.get(user=user)
     context = {
         "user": user,
         "messages": Message.objects.filter(wall=user),
-        #"top_rated_shows": Show.objects.filter()
+        "top_rated_shows": ShowRating.objects.filter(user=user).order_by('-rating', 'show__title'),
+        "users_reviews": Review.objects.filter(user=user).order_by('-rating__rating'),
+        "description": description,
     }
     #create forms, render messages on show page and you're done :)
     return render(request, 'dashboard/show_user.html', context)
