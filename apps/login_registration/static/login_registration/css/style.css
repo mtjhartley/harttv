@@ -2,7 +2,6 @@ body {
     background-color: #EEEEEE;
 }
 
-
 .navbar-default {
     height: 90px;
     /*border-left: 0px;
@@ -37,121 +36,51 @@ body {
 .navbar-default .navbar-brand:hover {
     color: white;
 }
-.navbar-default .navbar-nav .open a:focus,
-.navbar-default .navbar-nav .open a:hover{
-    color: #EEEEEE;
-    background-color: inherit;
-}
 .navbar .container-fluid .navbar-brand {
     margin-left: 0px
 }
-.navbar-nav li .dropdown-menu {
-    background-color: #173D4C
-}
 
 
-
-.navbar-default .navbar-nav .active a {
-    background-color: inherit;
-    color: white;
-}
-
-.navbar-default .navbar-nav li a:hover {
-    color: snow;
-}
-
-.navbar-nav .open a {
-    background-color: inherit;
-}
 .hart_tv_TV {
     color: #0090CC
 }
+/*font-family: 'Open Sans', sans-serif;*/
 
-.active {
-    color: #EEEEEE;
+.form-control {
+    margin-bottom: 30px;
 }
 
-#show_search {
-    padding-left: 10px;
-    padding-right: 50px;
+#register-box {
+    border-left: 1px solid gray;
 }
-#search_button {
+
+.login_header {
+    font-size: 3em;
+    color: #006C99;
+    margin-bottom: 20px;
+}
+#welcome {
+    color: #0090CC
+}
+.welcome-text {
+    color: #909090;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+}
+.btn-default {
     background-color: #0090CC;
-    border-color:#0090CC;
-    border-left: 0px;
-    font-family: 'Roboto', sans-serif;
-    color: #EEEEEE;
-}
-
-.navbar-nav li a{
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    margin-top: 7px;
-    border-right: 1px solid #EEEEEE;
-    color: #EEEEEE;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    font-size: 1.15em;
+
+}
+.navbar-bottom-border {
+    background-color: #0090CC;
+    height:10px;
 }
 
-.dropdown-menu li a{
-    border: none;
-}
-
-#nav-user {
-    border: none;
-}
-/*header ends here*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.show_info_column_header {
-    border-color: #bebebe;
-    border-style: solid;
-    border-width: 0 0 1px;
-    color: #000;
-    font-size: 12px;
-    font-weight: 700;
-    margin: 4px 0 5px;
-    padding: 3px 0;
-}
-
-.spaceit {
-    margin: 3px 0;
-    padding: 3px 0;
-    display: block;
-}
-.dark_text { 
-    color: #444;
-    font-weight: 700;
-    line-height: 1.5em;
-    margin: 0;
-    padding: 0;
-}
-
-
-.episode_comment {
-    margin: 10px;
-    padding:5px;
-}
-
-/*footer here*/
 /*footer here*/
 
 .footer-distributed{
@@ -175,8 +104,7 @@ body {
 /* Footer links */
 
 footer {
-  margin-top: 40px;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */

@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^episode/(?P<episode_id>\d+)/handle_add_episode_comment$', views.handle_add_episode_comment, name='handle_add_episode_comment'),
     url(r'^episode/(?P<episode_id>\d+)/(?P<comment_id>\d+)handle_delete_episode_comment$', views.handle_delete_episode_comment, name='handle_delete_episode_comment'),
     url(r'^episode/(?P<episode_id>\d+)/handle_update_episode_rating$', views.handle_update_episode_rating, name='handle_update_episode_rating'),
+    url(r'^about$', views.about, name='about'),
 ]

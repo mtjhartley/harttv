@@ -5,10 +5,33 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        {% load staticfiles %}
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,900" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'login_registration/css/style.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class='container'>
-            <h1>HARTTV APP</h1>
+        <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Hart<span class='hart_tv_TV'>TV</span></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+        </div>
+        </nav>
+
+
+            <!-- nav ends here-->
+        <div class='container-fluid'>
                 {% if messages %}
                 <ul>
                     <li>ATTENTION REQUIRED!</li>
@@ -17,59 +40,74 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-            <div class='col-md-6'>
-                <h2>Register</h2>
-                <form action='/register' method='post'>
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for='first_name'>First Name: </label>
-                        <input type='text' name='first_name' id='first_name' class='form-control' placeholder="First name">
-                    </div>
-                    <div class="form-group">
-                        <label for='last_name'>Last Name: </label>
-                        <input type='text' name='last_name' id='last_name' class='form-control' placeholder="Last name">
-                    </div>
+            <div class='col-md-7'>
+                <div class='col-md-6' id='login-box'>
+                    <h2 class='login_header'>Login</h2>
+                    <form action='/login' method='post'>
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <input type='text' name='email' id='email' class='form-control' placeholder="email">
+                        </div>
+                        <div class='form-group'>
+                            <input type='password' name='password' id='password' class='form-control' placeholder='password'>
+                        </div>
 
-                    <div class="form-group">
-                        <label for='email'>Email: </label>
-                        <input type='text' name='email' id='email' class='form-control' placeholder="Email">
-                    </div>
+                        <button type="submit" class="btn btn-default pull-right">Login</button>
+                    </form>
+                </div>
+                <div class='col-md-6' id='register-box'>
+                    <h2 class='login_header'>Register</h2>
+                    <form action='/register' method='post'>
+                        {% csrf_token %}
+                        <div class="form-group">
 
-                    <div class="form-group">
-                        <label for='password'>Password: </label>
-                        <input type='password' name='password' id='password' class='form-control' placeholder="Password">
-                    </div>
+                            <input type='text' name='first_name' id='first_name' class='form-control' placeholder="First name">
+                        </div>
+                        <div class="form-group">
 
-                    <div class="form-group">
-                        <label for='confirm_password'>Confirm Password: </label>
-                        <input type='password' name='confirm_password' id='confirm_password' class='form-control' placeholder="Confirm Password">
-                    </div>
+                            <input type='text' name='last_name' id='last_name' class='form-control' placeholder="Last name">
+                        </div>
 
-                    <div class="form-group">
-                        <label for='birthday'>Birthday: </label>
-                        <input type='date' name='birthday' id='birthday' class='form-control'>
-                    </div>
+                        <div class="form-group">
+                            <input type='date' name='birthday' id='birthday' class='form-control' placeholder="Birthday">
+                        </div>
 
-                    <button type="submit" class="btn btn-default">Submit</button>
-                    
-                </form>
+                        <div class="form-group">
+                            <input type='text' name='email' id='email' class='form-control' placeholder="Email">
+                        </div>
+
+                        <div class="form-group">
+                            <input type='password' name='password' id='password' class='form-control' placeholder="Password">
+                        </div>
+
+                        <div class="form-group">
+                            <input type='password' name='confirm_password' id='confirm_password' class='form-control' placeholder="Confirm Password">
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-default pull-right">Register</button>
+                        
+                    </form>
+                </div>
             </div>
-            <div class='col-md-6'>
-                <h2>Login</h2>
-                <form action='/login' method='post'>
-                    {% csrf_token %}
-                    <div class='form-group'>
-                        <label for='email'>Email: </label>
-                        <input type='text' name='email' id='email' class='form-control'>
-                    </div>
-                    <div class='form-group'>
-                        <label for='password'>Password: </label>
-                        <input type='password' name='password' id='password' class='form-control'>
-                    </div>
-
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
+            <div class='col-md-5'>
+                <h2 class='login_header' id='welcome'>Welcome!</h2>
+                <p class='welcome-text'>HartTV is a webapp developed by Michael Hartley in Python with the Django Framework, currently using sqlite(lol) as the database.
+                    HartTV aims to alieviate the pain of tracking your progress in TV Shows that are distributed across TV, Netflix, Hulu, and other streaming sources.</p>
+                    
+                </p>
+                <h4>Please login or register to continue</h4>
             </div>
         </div>
+
+            <footer>
+            <div class="container-fluid footer-container">
+                    <a class="footer-brand" href="#">Hart<span class='hart_tv_TV'>TV</span></a>
+
+                    <p class="footer-text">2017 Michael Hartley</p>
+
+            </div>
+            </footer>
     </body>
 </html>

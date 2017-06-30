@@ -311,7 +311,8 @@ def handle_update_episode_rating(request, episode_id):
     
 
 
-    
+def about(request):
+    return render(request, 'harttv_app/about.html')
 
 def delete_all_shows(request):
     Show.objects.all().delete()
