@@ -151,6 +151,45 @@ body {
     padding:5px;
 }
 
+
+/*all shows page styling*/
+
+.show-table-stats, .show-table-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.25em;
+    font-weight: bold;
+
+}
+
+.show-table-title {
+    color: #006C99;
+    vertical-align: top;
+}
+.show-table-stats {
+    color: gray;
+    display: inline-block;
+    padding-left: 3em;
+    padding-right: 1em;
+    vertical-align: top;
+    text-align: right;
+
+}
+
+.all-show-image {
+    max-width: 85%; max-height: 85%;
+    display: block;
+}
+.stats-holder {
+    float: right;
+    width: 33%;
+    display: inline-block;
+}
+
+.show-row {
+    padding-bottom: 1em;
+    border-bottom: 1px solid darkgray;
+    padding-top: 1em;
+}
 /*footer here*/
 /*footer here*/
 

@@ -29,7 +29,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
@@ -39,7 +39,7 @@
                     <li role="separator" class="divider"></li>
                     <li><a href="#">One more separated link</a></li>
                 </ul>
-                <li><a href="{% url 'harttv:about' %}">About</a></li>
+                <li class="active"><a href="{% url 'harttv:about' %}">About</a></li>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

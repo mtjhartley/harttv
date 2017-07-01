@@ -29,8 +29,8 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
+                <li><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
+                <li class='active'><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -65,7 +65,41 @@
         </div>
         </nav>
         <!--new header ends here -->
+
+        <!-- new all shows starts here -->
+
         <div class='container'>
+            {% for show in shows %}
+            <div class='row show-row'>
+                <div class='col-md-12 show-table-header'>
+                    <div class='row'>
+                        <div class='col-md-2'>
+                            <p class='show-table-title'><a href="{% url 'harttv:view_show' show_maze_id=show.maze_id %}">{{show.title}}</a></h3>
+                        </div>
+                        <div class='col-md-10'>
+                            <div class='stats-holder'><p class='show-table-stats'> Network: {% if not show.network %} N/A {% else %} {{show.network}} {% endif %}</p></div>
+                            <div class='stats-holder'><p class='show-table-stats'>Premiered: {{show.premiered|date:"Y"}}</p></div>
+                            <div class='stats-holder'><p class='show-table-stats'>ID #{{show.maze_id}}</p></div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-2'>
+                            <img class='all-show-image' src="{{show.image_link}}">
+                        </div>
+                        <div class='col-md-10'>
+                            <p>{{show.description|truncatewords:60}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+
+        <!-- new all shows ends here -->
+        <div class='container-fluid'>
             <h2>All shows are users have looked for!</h2>
             <h4>If you don't see a show here, don't worry. Just use the searchbar to look for it!</h4>
             <table class='table table-hover'>
@@ -87,7 +121,7 @@
                         <td><img src="{{show.image_link}}" style="width: 150px; height: 150px;"></td>
                         <td>{{show.network}}</td>
                         <td>{{show.premiered|date:"Y"}}</td>
-                        <td>{{show.description}}</td>
+                        <td>{{show.description|truncatewords:100}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
