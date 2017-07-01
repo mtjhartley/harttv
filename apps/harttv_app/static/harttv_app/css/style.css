@@ -179,9 +179,16 @@ body {
 }
 
 .all-show-image {
-    max-width: 85%; max-height: 85%;
+    width: 100%; height: 100%;
     display: block;
+    padding-right: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-right: 1px solid #a6a6a6;
+    margin-bottom: 10px;
 }
+
+
 .stats-holder {
     float: right;
     width: 33%;
@@ -329,9 +336,13 @@ body {
     color: #686868;
     font-weight: bold;
 }
-.comment-container {
+.comments-container {
     height: 200px;
-    overflow: scroll;
+    overflow:scroll;
+}
+.comment-container {
+    height: 100px;
+    overflow: hidden;
 }
 /*episode stuff here*/
 .episode-thumbnail {
@@ -371,11 +382,21 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
+   /*Set the fixed height of the footer here */
   height: 60px;
   background-color: #006C99;
 }
-
+.submit-button {
+    background-color: #0090CC;
+    border-color:#0090CC;
+    border-left: 0px;
+    font-family: 'Roboto', sans-serif;
+    color: #EEEEEE;
+    float: right;
+}
+.update-description-button {
+    margin-top: 10px;
+}
 .footer-brand {
     color: white;
     font-family: 'Roboto', sans-serif;
@@ -397,3 +418,13 @@ footer {
     margin-top: 5px;
     color: #EEEEEE;
 }
+
+.footer-right {
+    float:right;
+}
+
+.footer-brand:hover {
+    color: white;
+    text-decoration: none;
+}
+

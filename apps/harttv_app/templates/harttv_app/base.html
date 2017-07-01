@@ -11,9 +11,10 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
     </head>
     <body>
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -28,15 +29,12 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'dashboard:index' %}">User Dashboard</a></li>
-                    <li><a href="#">Top All-Time Shows</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
                 </ul>
                 <li><a href="{% url 'harttv:about' %}">About</a></li>
                 </li>
@@ -63,84 +61,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
         </div>
         </nav>
-        <div class='container'>
-            <div class='col-md-12' style="margin-bottom: 100px;">
-                <h1>This is {{user.first_name}}'s Page</h1>
-                <h4>Join Date: {{user.created_at|date:"m/d/Y"}} </h4>
-                <h4>Email: {{user.email}} </h4>
-                <h4>Description</h4>
-                <p>{{description.description_text}}</p>
-                <div class='row'>
-                    <div class='col-md-4'>
-                        <h3>Favorite Shows</h3>
-                        <ul>
-                        
-                        {% for favorite in user.users_favorites.all %}
-                            <li><a href="{% url 'harttv:view_show' favorite.maze_id %}">{{favorite.title}}</a></li> 
-                            <p>{{favorite.network}} {{favorite.premiered|date:"Y"}}</p> 
-                            <p>{{favorite.status}}</p>
-                        {% endfor %}
-                        </ul>
-                    </div>
+        <!--new header ends here -->
+        <div class='container' style="margin-top: 50px; margin-bottom: 100px;">
+        {% block content %}
 
-                    <div class='col-md-4'>
-                        <h3>Top Rated Shows</h3>
-                        {% for rated_show in top_rated_shows %}
-                            <p>Title: {{rated_show.show.title}} Rating: {{rated_show.rating}}</p>
-                        {% endfor %}
-                    </div>
-
-                    <div class='col-md-4'>
-                        <h3>User's Reviews</h3>
-                        {% for review in users_reviews %}
-                            <p>Review Title: {{review.title}} for {{review.show.title}}</p>
-                            <p>Review Content: {{review.text}}</p>
-                            <p>Review Rating: {{review.rating.rating}}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-
-
-                <form action="{% url 'dashboard:create_message' user.id %}" method='post'>
-                    {% csrf_token %}
-                    <div class='form-group'>
-                        <label for="message">Leave a Message for {{user.first_name}}</label>
-                        <textarea name='message' id='message' class='form-control'></textarea>
-                    </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-
-                <div class='message_container'>
-                    <h1>Messages:</h1>
-                    {% for message in messages %}
-                        <div class='message_container'>
-                            <h3>{{message.user.first_name}}: {{message.message_text}} {{message.created_at}}</h3>
-                            {% for comment in message.messages_comments.all %}
-                                <div class='comment_container'>
-                                    <p>{{comment.commenter.first_name}}: {{comment.comment_text}}</p>
-                                    <p>{{comment.created_at}}</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <form action="{% url 'dashboard:create_comment' message.id %}" method='post'>
-                            {% csrf_token %}
-                            <div class='form-group'>
-                                <label for="comment">Leave a Comment on this message</label>
-                                <textarea name='comment' id='comment' class='form-control'></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-
-                    {% endfor %}
-            
-                </div>
-            </div>
+        {% endblock %}
         </div>
 
 
-
-        </div>
         <footer>
         
         <div class="container-fluid footer-container">
@@ -157,6 +85,8 @@
 
         </div>
         </footer>
-    
+
+        
+
     </body>
 </html>

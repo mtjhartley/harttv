@@ -81,6 +81,13 @@ body {
     font-family: 'Roboto', sans-serif;
     color: #EEEEEE;
 }
+.submit-button {
+    background-color: #0090CC;
+    border-color:#0090CC;
+    border-left: 0px;
+    font-family: 'Roboto', sans-serif;
+    color: #EEEEEE;
+}
 
 .navbar-nav li a{
     padding-left: 20px;
@@ -100,3 +107,22 @@ body {
     border: none;
 }
 /*header ends here*/
+.footer-container .footer-brand, .footer-text{
+    margin-top: -5px;
+    display: inline-block;
+    vertical-align: top;
+}
+.footer-container .footer-text {
+    margin-left: 15px;
+    margin-top: 5px;
+    color: #EEEEEE;
+}
+
+.footer-right {
+    float:right;
+}
+
+.footer-brand:hover {
+    color: white;
+    text-decoration: none;
+}

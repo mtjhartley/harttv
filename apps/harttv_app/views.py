@@ -132,6 +132,8 @@ def search_results(request):
         if show.premiered:
             print show.premiered
             showDict['airdate'] = datetime.datetime.strptime(show.premiered, '%Y-%m-%d').date()
+        else:
+            showDict['airdate'] = 'N/A'
         if show.network:
             showDict['network'] = show.network.name
         else:

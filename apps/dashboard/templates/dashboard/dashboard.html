@@ -63,7 +63,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
         </div>
         </nav>
-        <div class='container-fluid'>
+        <div class='container'>
             <h1>Hello {{request.session.first_name}}, Here's the 
                 {% if boolean %}
                 Admin
@@ -113,6 +113,22 @@
             <a href="{% url 'dashboard:add_user' %}" type="submit" class="btn btn-default">Add a new user!</a>
             {% endif %}
         </div>
+            <footer>
+            
+            <div class="container-fluid footer-container">
+                    <a class="footer-brand" href="#">Hart<span class='hart_tv_TV'>TV</span></a>
+
+                    <p class="footer-text">2017 Michael Hartley</p>
+                    <p class="footer-text footer-right">mtjhartley@gmail.com</p>
+                    <a class="footer-text footer-right" href="https://www.github.com/mtjhartley">GitHub</a>
+                    <p class="footer-text footer-right">Portfolio (Coming Soon)</p>
+                    <p class="footer-text footer-right"></p>
+                        
+
+
+
+            </div>
+            </footer>
     
     </body>
 </html>
