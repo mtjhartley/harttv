@@ -84,10 +84,10 @@
                     </div>
                     <div class='row'>
                         <div class='col-md-2'>
-                            <img class='all-show-image' src="{{show.image_link}}">
+                            <a href="{% url 'harttv:view_show' show_maze_id=show.maze_id %}"><img class='all-show-image' src="{{show.image_link}}"></a>
                         </div>
                         <div class='col-md-10'>
-                            <p>{{show.description|truncatewords:60}}</p>
+                            <p class='show-table-description'>{{show.description|truncatewords:200}}</p>
                         </div>
                     </div>
                 </div>
@@ -99,35 +99,7 @@
 
 
         <!-- new all shows ends here -->
-        <div class='container-fluid'>
-            <h2>All shows are users have looked for!</h2>
-            <h4>If you don't see a show here, don't worry. Just use the searchbar to look for it!</h4>
-            <table class='table table-hover'>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Network</th>
-                        <th>Premiered</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for show in shows %}
-                    <tr>
-                        <td>{{show.maze_id}}</td>
-                        <td><a href="{% url 'harttv:view_show' show_maze_id=show.maze_id %}">{{show.title}}</a></td>
-                        <td><img src="{{show.image_link}}" style="width: 150px; height: 150px;"></td>
-                        <td>{{show.network}}</td>
-                        <td>{{show.premiered|date:"Y"}}</td>
-                        <td>{{show.description|truncatewords:100}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
 
-        </div>
 
 
         
