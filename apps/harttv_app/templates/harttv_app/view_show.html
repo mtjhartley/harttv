@@ -64,131 +64,163 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
         </div>
         </nav>
+
+        <!-- new one show page starts here -->
         <div class='container'>
-
-
-            <div class="row">
-                <div class="col-sm-4" style="background-color:lavender;">.col-sm-4
-                    <h2>{{show.title}}</h2>
-                    <img src="{{show.image_link}}" alt='show_image' style="width:300px; height:450px;">
+            <div class='col-md-7'>
+                <div class='row'>
+                    <p class='one-show-header' id='one-show-title'>{{show.title}}</p>
                     {% if not favorited %}
-                    <form action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
+                    <form id='add-remove-favorite' class='one-show-header'action="{% url 'harttv:handle_add_favorite' show.id%}" method='post'>
                         {% csrf_token %}
-                        <button type='submit' class='btn btn-default'>&#9734; Add to Favorites</button>
+                        <button type='submit' class='btn btn-default one-show-button'>&#9734; Add to Favorites</button>
                     </form>
                     {% else %}
-                    <form action="{% url 'harttv:handle_remove_favorite' show.id%}" method='post'>
+                    <form id='add-remove-favorite' class='one-show-header' action="{% url 'harttv:handle_remove_favorite' show.id%}" method='post'>
                         {% csrf_token %}
-                        <button type='submit' class='btn btn-default'>Remove From Favorites</button>
+                        <button type='submit' class='btn btn-default one-show-button'>Remove From Favorites</button>
                     </form>
                     {% endif %}
-                    <table class='table'>
-                        <thead>
-                            <!--<tr>
-                                <td>Attribute</td>
-                                <td>Data</td>
-                            </tr>-->
-                        </thead>
-                        <tbody>
-                            <h3 class='show_info_column_header'>Information</h3>
-                            <tr>
-                                <th>Episodes</th>
-                                <th>{{num_episodes}}</th>
-                            </tr>
-                            <tr>
-                                <th>Status</th>
-                                <th>{{show.status}}</th>
-                            </tr>
-                            <tr>
-                                <th>Preimere Date</th>
-                                <th>{{show.premiered}}</th>
-                            </tr>
-                            <tr>
-                                <th>Network</th>
-                                <th>{{show.network}}</th>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class='table'>
-                        <thead>
-                        
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                            <h3 class='show_info_column_header'>Statistics</h3>
-                            <tr>
-                                <th>Average Score</th>
-                                <th>{{show_average_rating}} ({{show_num_users_rated}} users)</th>
-                            </tr>
-                            <tr>
-                                <th>Your Score</th>
-                                <th>{{current_rating}}</th>
-                            </tr>
-                            <tr>
-                                <th>Favorites</th>
-                                <th>{{favorites}}</th>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-                <div class="col-sm-8" style="background-color:lavenderblush;">.col-sm-8
-                    <p>Description: {{show.description}}</p>
-                    <div class="episodes_container" style="height: 550px; overflow: scroll;">
-                        <h3>Episodes</h3>
-                        <div class="row" style="overflow: scroll; vertical-align: top;">
+                <div class='row'>
+                    <div class='col-md-4'> <!-- this is for the show image-->
+                    <img src="{{show.image_link}}" class='one-show-image'>
+
+                    </div>
+                    <div class='col-md-8'> <!-- this is for the show stats-->
+                        <table class='table show-table'>
+                            <thead>
+                                <!--<tr>
+                                    <td>Attribute</td>
+                                    <td>Data</td>
+                                </tr>-->
+                            </thead>
+                            <tbody>
+
+                                <tr class='show-table-row'>
+                                    <th class='first-column'>Episodes</th>
+                                    <th class='second-column'>{{num_episodes}}</th>
+                                </tr>
+                                <tr>
+                                    <th class='first-column'>Status</th>
+                                    <th class='second-column'>{{show.status}}</th>
+                                </tr>
+                                <tr>
+                                    <th class='first-column'>Preimere Date</th>
+                                    <th class='second-column'>{{show.premiered}}</th>
+                                </tr>
+                                <tr>
+                                    <th class='first-column'>Network</th>
+                                    <th class='second-column'>{{show.network}}</th>
+                                </tr>
+                                
+                                <tr>
+                                    <th class='first-column'>Average Score</th>
+                                    <th class='second-column'>{{show_average_rating}} ({{show_num_users_rated}} users)</th>
+                                </tr>
+                                <tr>
+                                    <th class='first-column'>Your Score</th>
+                                    <th class='second-column'>{{current_rating}}</th>
+                                </tr>
+                                <tr>
+                                    <th class='first-column'>Favorites</th>
+                                    <th class='second-column'>{{favorites}}</th>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div>
+                    <h3 class='episodes-header'>Episodes</h3>
+                    <hr style='color:blue;'>
+                    <div class="episodes-container" style="overflow: scroll; vertical-align: top;">
+                      
+
                             {% for episode in episodes %}
-                                <div class="col-sm-4" style="background-color:lightblue; max-height: 100%; max-width: 100%;">
-                                    <h4><a href="{% url 'harttv:view_episode' episode.id%}">{{episode.title}}</a></h4> 
-                                    <p>S{{episode.season_number}}E{{episode.episode_number}}</p>
-                                    <p>Original Airdate: {{episode.airdate}}</p>
-                                    <p>Thumbnail: <img src="{{episode.image_link}}" alt="Ep Thumbnail" style="max-width: 100%; max-height: 100%;"></p>
+                                <div class="col-sm-4" class='individual-episode-container'>
+                                    <h5 class='episode-title-season'><a href="{% url 'harttv:view_episode' episode.id%}">{{episode.title}}</a></h5> 
+                                    <h5 class='episode-title-season'>(S{{episode.season_number}}E{{episode.episode_number}})</h5>
+                                    <img src="{{episode.image_link}}" class='episode-image' alt="Ep Thumbnail" style="max-width: 90%; max-height: 90%;">
                                 </div>
                                 {% if forloop.counter|divisibleby:3 %}
-                        </div>
-                        <div class="row">
+   
+
                                 {% endif %}
                         {% endfor %}
-                        </div>
                     </div>
-     
-                    <h3>Reviews: </h3>
-                    {% for review in show.reviews.all %}
-                        <p>{{review.user.first_name}}: {{review.title}}</p>
-                        <p>Content: {{review.text}}</p>
-                        <p>Rating: {{review.rating.rating}}</p>
-                    {% endfor %}
-
-                    <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
-                        {% csrf_token %}
-                        <div class='form-group'>
-                            <label for='title'>Title:</label>
-                            <input type='text' name='title'>
-                        </div>
-                        <div class='form-group'>
-                            <label for='review'>Review:</label>
-                            <textarea name='review' class='form-control'></textarea>
-                        </div>
-                        <div class='form-group'>
-                            <label for="rating">Rating:</label>
-                            <select class='form-group' name='rating'>
-                                {% if current_rating %}
-                                    {% for option in options %}
-                                        <option class='form-group' value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
-                                    {% endfor %}
-                                {% else %}
-                                        <option selected disabled>Select</option>
-                                    {% for option in options %}
-                                        <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
-                                    {% endfor %}
-                                {% endif %}                
-                            </select>
-
-                            <!-- would be a great time to use ajax!!!-->
-                        </div>
-                        <button class='btn btn-default' type='submit'>Submit Rating</button>
-                    </form>
                 </div>
+
+
+            </div>
+
+            <div class='col-md-5'>
+                <div class='row'>
+                    <p id='one-show-description-header'>Description</p>
+                </div>
+                <div class='row'>
+                    <p id='one-show-description-text'>{{show.description}}</p>
+                </div>
+                <div class='row'>
+                    <h3 id="one-show-review-header">Reviews</h3>
+                    <div class='reviews'>
+                        {% for review in show.reviews.all %}
+                            {% if show.reviews.all %}
+                            <div class='review'>
+                                <p><span class='reviewer-name'>{{review.user.first_name}}</span><span class='reviewer-title'> - {{review.title}}</span><span class='reviewer-date'>{{review.created_at|date:"m/d/y"}}</span></p>
+                                <p class='review-text'>{{review.text}}</p>
+                                <p class='review-rating'>Rating: {{review.rating.rating}}</p>
+                                <hr>
+                            </div>
+                            {% else %}
+                            <div class='review'>
+                                <p>No Reviews yet! Add one :)</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+            
+                <div class='row'>
+  
+                        <h2 class='add-review-header'>Add Review</h2>
+                        <form action="{% url 'harttv:handle_add_review' show.id %}" method='post'>
+                            {% csrf_token %}
+                            <div class='form-group'>
+                                <label for='title' class='add-review-title'>Title</label>
+                                <input type='text' name='title' class='form-control'>
+                            </div>
+                            <div class='form-group'>
+                                <label for='review' class='add-review-title'>Review</label>
+                                <textarea name='review' class='form-control'></textarea>
+                            </div>
+                            <div class='form-group'>
+                                <label for="rating" class='add-review-title'>Rating</label>
+                                <select class='form-group' name='rating'>
+                                    {% if current_rating %}
+                                        {% for option in options %}
+                                            <option class='form-group' value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                            <option selected disabled>Select</option>
+                                        {% for option in options %}
+                                            <option value="{{option.0}}" {% if current_rating == option.0 %} selected {% endif %}>{{option.1}}</option>
+                                        {% endfor %}
+                                    {% endif %}                
+                                </select>
+
+                                <!-- would be a great time to use ajax!!!-->
+                            </div>
+                            <button class='btn btn-default one-show-button' id='review-button'type='submit'>Submit Rating</button>
+                        </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- new one show page ends here -->
+
+        
 
     </div>
     </body>
