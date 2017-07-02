@@ -105,7 +105,7 @@ def destroy_user(request, user_id):
 def show_user(request, user_id):
     user = User.objects.get(id=user_id)
     if Description.objects.filter(user=user):
-        description = Description.objects.filter(user=user)
+        description = Description.objects.get(user=user)
     else:
         description = "The user has not yet entered a bio!"
     context = {

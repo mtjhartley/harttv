@@ -487,10 +487,12 @@ label {
 }
 .random-episode-view-show {
     color: #EEEEEE;
+    float: right;
 }
+
 .paragraph-text {
 
-    color: #686868;
+    color: #909090;
     font-size: 1em;
     font-family: 'Open Sans', sans-serif;
     margin-top: 15px;
@@ -507,7 +509,10 @@ label {
 .top-rated-show-title {
    color: #0090CC;
    float: center;
+   margin: 0;
+   font-size: 1.125em;
 }
 .top-rated-show-image {
-    width:160px; height:160px;
+    width:140px; height:180px;
+    border: 2px  solid #686868;
 }

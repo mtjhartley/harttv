@@ -23,7 +23,7 @@ def index(request):
     random_idx = random.randint(0, Show.objects.count() - 1)
     random_show = Show.objects.all()[random_idx]
     # show_average_rating = ShowRating.objects.aggregate(Avg('rating')).order_by('-rating').distinct('show')
-    top_ranked_shows = ShowRating.objects.values_list('show__title', 'show__maze_id', 'show__image_link').annotate(average_rank=Avg('rating')).order_by('-average_rank')[:3]
+    top_ranked_shows = ShowRating.objects.values_list('show__title', 'show__maze_id', 'show__image_link').annotate(average_rank=Avg('rating')).order_by('-average_rank')[:4]
     print top_ranked_shows[0]
     print top_ranked_shows[0][0]
     print top_ranked_shows[0][1]

@@ -19,7 +19,7 @@
                 <div class='row'>
                     <p class='paragraph-text'>
                         Welcome to HartTV!
-                        This project, created by Michael Hartley, was born out of a love of watching television content and discussing it with friends. 
+                        This project was born out of a love of watching television content and discussing it with friends. 
                         Registered users can favorite shows, write reviews, get information on individual episodes, and contribute to the rankings.
                     </p>
                     <p class='paragraph-text'>
@@ -32,7 +32,7 @@
                         If you don't see a show that you've watched in this list of shows, fret not! Simply look for the show
                         with our search bar and you'll be returned a page of the top 10 shows matching your query.
                         Clicking on any of these shows will dynamically generate that show's page and add it 
-                        to our database!
+                        to our database.
                     </p>
 
                     <p class='paragraph-text'>
@@ -45,17 +45,14 @@
                 <div class='row'>
                     <p class='top-rated-header'>User's Top Rated Shows</p>
                     {% for show in top_rated %}
-                    <div class='col-md-4'>
-                        <h4 class='nowrap top-rated-show-title'>{{show.0}}</h4>
-                        <a href="{{show.1}}">
+                    <div class='col-md-3'>
+                        <p class='nowrap top-rated-show-title'>{{show.0}}</p>
+                        <a href="{% url 'harttv:view_show' show.1 %}">
                         <img src="{{show.2}}" class='top-rated-show-image'>
                         </a>
                         </p>
                     </div>
                     {% endfor %}
-
-
-
                 </div>
                     
                     
