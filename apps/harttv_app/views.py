@@ -9,10 +9,10 @@ import threading
 import random
 
 from ..login_registration.models import User
-tvm = pytvmaze.TVMaze('mtjhartley')
+# tvm = pytvmaze.TVMaze('mtjhartley')
 # Create your views here.
 
-from django.contrib.auth.decorators import login_required
+
 
 # def is_user_logged_in(request):
 #     if not 'id' in request.session:
@@ -28,11 +28,7 @@ def get_users_recently_viewed_shows(user):
     last_4_viewed = []
 
     users_recently_viewed = list(RecentlyViewedShow.objects.filter(user=user).order_by('-created_at').values_list('show__title', 'show__maze_id', 'show__image_link').distinct())
-    
-    # for recently_viewed_show in users_recently_viewed:
-    #     if recently_viewed_show not in last_4_viewed:
-    #         last_4_viewed.append(recently_viewed_show)
-    # return last_3_viewed[:4]
+
     iter_index = 0
     while len(last_4_viewed) < 4 and iter_index < len(users_recently_viewed):
         if users_recently_viewed[iter_index] not in last_4_viewed:
@@ -222,22 +218,8 @@ def search_results(request):
         "search": search,
         "results": results,
     }
-
     return render (request, 'harttv_app/search_results.html', context)
 
-# def handle_update_show_rating(request, show_id):
-#     user = User.objects.get(id=request.session['id'])
-#     show = Show.objects.get(id=show_id)
-#     existing_rating = ShowRating.objects.filter(user=user, show=show)
-#     if existing_rating:
-#         existing_rating[0].rating = int(request.POST['rating'])
-#         existing_rating[0].save()
-#     else:
-#         ShowRating.objects.create(user=user, show=show, rating=int(request.POST['rating']))
-#     url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
-#     return HttpResponseRedirect(url)
-
-#refactor to review.model manager later. 
 def handle_add_review(request, show_id):
     
     if request.method == 'POST':
@@ -387,8 +369,3 @@ def about(request):
     if not 'id' in request.session:
         return redirect(reverse('auth:index'))
     return render(request, 'harttv_app/about.html')
-
-def delete_all_shows(request):
-    Show.objects.all().delete()
-    Episode.objects.all().delete()
-    return redirect(reverse('harttv:index'))

@@ -63,13 +63,13 @@
                             <div class='message_container'>
                                 <div class='row'>
                                     <div class='initial-message'>
-                                        <p class='message-author'>{{message.user.first_name}} {{message.user.last_name}} - <span class='message-date'>{{message.created_at}}</span></p>
-                                        <p class='message-text'>{{message.message_text}} {{message.created_at}}</p>
+                                        <p class='message-author'>{{message.user.first_name}} {{message.user.last_name}} - <span class='message-date'>{{message.created_at|timesince}} ago</span></p>
+                                        <p class='message-text'>{{message.message_text}}</p>
                                     </div>
                                 </div>
                                 {% for comment in message.messages_comments.all %}
                                     <div class='comment_container'>
-                                        <p class='comment-author'>{{comment.commenter.first_name}} {{comment.commenter.last_name}} - <span class='comment-date'>{{comment.created_at}}</span></p>
+                                        <p class='comment-author'>{{comment.commenter.first_name}} {{comment.commenter.last_name}} - <span class='comment-date'>{{comment.created_at|timesince}} ago</span></p>
                                         <p>{{comment.comment_text}}</p>
                                     </div>
                                 {% endfor %}
