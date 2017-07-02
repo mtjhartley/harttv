@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.db.models import Count, Avg
-from .models import Show, Episode, Review, EpisodeComment, EpisodeRating, ShowRating
+from .models import Show, Episode, Review, EpisodeComment, EpisodeRating, ShowRating, RecentlyViewedShow
 import datetime
 import pytvmaze
 import threading
@@ -24,28 +24,58 @@ def generate_rating_options():
     rating_options = zip(ratings, ratings_strings)
     return rating_options
 
+def get_users_recently_viewed_shows(user):
+    last_4_viewed = []
+
+    users_recently_viewed = list(RecentlyViewedShow.objects.filter(user=user).order_by('-created_at').values_list('show__title', 'show__maze_id', 'show__image_link').distinct())
+    
+    # for recently_viewed_show in users_recently_viewed:
+    #     if recently_viewed_show not in last_4_viewed:
+    #         last_4_viewed.append(recently_viewed_show)
+    # return last_3_viewed[:4]
+    iter_index = 0
+    while len(last_4_viewed) < 4 and iter_index < len(users_recently_viewed):
+        if users_recently_viewed[iter_index] not in last_4_viewed:
+            last_4_viewed.append(users_recently_viewed[iter_index])
+        iter_index += 1
+    return last_4_viewed
+
+
 #@login_required(login_url='auth:index')
 def index(request):
     if not 'id' in request.session:
         return redirect(reverse('auth:index'))
+    user = User.objects.get(id=request.session['id'])
+    recently_viewed_shows = get_users_recently_viewed_shows(user)
+
     random_idx = random.randint(0, Show.objects.count() - 1)
     random_show = Show.objects.all()[random_idx]
     # show_average_rating = ShowRating.objects.aggregate(Avg('rating')).order_by('-rating').distinct('show')
-    top_ranked_shows = ShowRating.objects.values_list('show__title', 'show__maze_id', 'show__image_link').annotate(average_rank=Avg('rating')).order_by('-average_rank')[:4]
-    print top_ranked_shows[0]
-    print top_ranked_shows[0][0]
-    print top_ranked_shows[0][1]
-    print top_ranked_shows[0][2]
-    print top_ranked_shows
+    #try with recenetly viewed shows
 
     # all_shows_average_rating = Show.objects.values_list('title').annotate(Avg('show_ratings'))
     # print all_shows_average_rating
     context = {
         "show": random_show,
-        "top_rated": top_ranked_shows,
+        "recently_viewed": recently_viewed_shows,
 
     }
     return render(request, 'harttv_app/index.html', context)
+
+def top_rated_shows(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
+    top_ranked_shows = ShowRating.objects.values_list('show__title', 'show__maze_id', 'show__image_link', 'show__premiered', 'show__network', 'show__description').annotate(average_rank=Avg('rating')).order_by('-average_rank')[:10]
+    print top_ranked_shows
+    context = {
+        "shows": top_ranked_shows,
+    }
+    print top_ranked_shows[0]
+    print top_ranked_shows[0][0]
+    print top_ranked_shows[0][1]
+    print top_ranked_shows[0][2]
+    print top_ranked_shows
+    return render(request, 'harttv_app/top_rated_shows.html', context)
 
 def view_all_shows(request):
     if not 'id' in request.session:
@@ -55,6 +85,10 @@ def view_all_shows(request):
     }
     return render(request, 'harttv_app/all_shows.html', context)
 
+
+
+
+    
 
 def view_show(request, show_maze_id):
     if not 'id' in request.session:
@@ -80,7 +114,9 @@ def view_show(request, show_maze_id):
     print "*" * 50
     print "testing seasons and episodes"
     print User.get_rating(user, show.id)
-
+    #adding to recently viewed
+    RecentlyViewedShow.objects.create(user=user, show=show)
+    
     #if show is in users favorites, context favorited : True
     #else context favorited: False
     print show.favorite.filter(id=user.id)
@@ -231,13 +267,6 @@ def handle_add_review(request, show_id):
             Review.objects.create(title=review_title, text=review_text,user=user, show=show, rating=rating)
             url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
             return HttpResponseRedirect(url)
-
-            
-            
-            
-
-
-
 
 def handle_add_favorite(request, show_id):
     if request.method == 'POST':

@@ -1,0 +1,33 @@
+{% extends 'harttv_app/base.html' %}
+{% block content %}
+
+    <h2 class='edit-header'>HartTV User's Top 10 Rated Shows</h2> 
+    {% for show in shows %}
+    <div class='row show-row'>
+        <div class='col-md-12 show-table-header'>
+            <div class='row'>
+                <div class='col-md-2'>
+                    <p class='show-table-title'><a href="{% url 'harttv:view_show' show.1 %}">{{show.0}}</a></p>
+                    <p class='show-table-rank'>Rank {{forloop.counter}}</p>
+
+                </div>
+                <div class='col-md-10'>
+                    <div class='stats-holder'><p class='show-table-stats'>Average Rating {{show.6}}</p></div>
+                    <div class='stats-holder'><p class='show-table-stats'>Premiered: {{show.3|date:"Y"}}</p></div>
+                    <div class='stats-holder'><p class='show-table-stats'>ID #{{show.1}}</p></div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-2'>
+                    <a href="{% url 'harttv:view_show' show.1 %}"><img class='all-show-image' src="{{show.2}}"></a>
+                </div>
+                <div class='col-md-10'>
+                    <p class='show-table-description'>{{show.5|truncatewords:200}}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+
+{% endblock %}

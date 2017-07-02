@@ -154,16 +154,21 @@ body {
 
 /*all shows page styling*/
 
-.show-table-stats, .show-table-title {
+.show-table-stats, .show-table-title, {
     font-family: 'Roboto', sans-serif;
     font-size: 1.25em;
     font-weight: bold;
-
 }
 
 .show-table-title {
-    color: #006C99;
     vertical-align: top;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.show-table-rank {
+    color: #006C99;
+    font-size: 1em;
+    font-weight: bold;
 }
 .show-table-stats {
     color: gray;
@@ -260,13 +265,24 @@ body {
     width: 154px;
     height: 83px;
 }
+.favorite-shows {
+    height: 350px;
+    overflow: scroll;
+}
+.favorite-image {
+    border: 2px solid gray;
+    width: 200px;
+    height: 100px;
+    margin: 5px;
+}
 .episode-title-season {
     padding: 0;
     margin: 0;
     margin-top: 5px;
-    overflow: hidden;
+    overflow:scroll;
     white-space: nowrap;
 }
+
 
 #one-show-description-header {
     color: #006C99;
@@ -297,6 +313,13 @@ body {
     color: #337ab7
 
 }
+
+
+.user-page-review-rating {
+    color: #686868;
+
+}
+
 .one-show-button {    
     background-color: #0090CC;
     border-color:#0090CC;
@@ -519,3 +542,58 @@ label {
 }
 
 .navbar-collapse { background:#173D4C;}
+
+.message-author {
+    color: #006C99;
+    margin-left: 10px;
+}
+
+/*.message_container {
+    margin: 20px;
+}
+
+
+
+.comment_container h4 {
+    font-size: 1.3em;
+}
+
+.comment_container p {
+    font-size: 1em;
+    margin-left: 15px;
+}*/
+
+
+.message-author, .message-text {
+    vertical-align: top;
+    margin-bottom: 2px;
+}
+.message-author {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.message-text {
+    margin-left: 10px;
+}
+.message-date {
+    font-size: 1.0em;
+    font-weight: normal;
+}
+.initial-message {
+    padding-bottom: 2px;
+}
+
+.comment-author {
+    font-size: .9em;
+    color: #006C99;
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+.comment-date {
+    font-weight: normal;
+    font-size: .85em;
+}
+.message-comment-submit {
+    margin-top: 5px;
+    padding: 5px;
+}

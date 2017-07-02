@@ -72,7 +72,7 @@ class UserManager(models.Manager):
         
         if validRegistration:
             hashed = bcrypt.hashpw(userInfo['password'].encode(), bcrypt.gensalt())
-            new_user = User.objects.create(first_name = userInfo['first_name'], last_name = userInfo['last_name'], email=userInfo['email'], password=hashed, birthday=userInfo['birthday'], admin=admin)
+            new_user = User.objects.create(first_name = userInfo['first_name'], last_name = userInfo['last_name'], email=userInfo['email'], password=hashed, admin=admin)
             registrationObject['user'] = new_user
         return registrationObject
         

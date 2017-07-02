@@ -43,8 +43,8 @@
                     </p>
                 </div>
                 <div class='row'>
-                    <p class='top-rated-header'>User's Top Rated Shows</p>
-                    {% for show in top_rated %}
+                    <p class='top-rated-header'>Your Recently Viewed Shows</p>
+                    {% for show in recently_viewed %}
                     <div class='col-md-3'>
                         <p class='nowrap top-rated-show-title'>{{show.0}}</p>
                         <a href="{% url 'harttv:view_show' show.1 %}">

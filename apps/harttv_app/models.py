@@ -108,6 +108,8 @@ class ShowRating(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     show = models.ForeignKey(Show, related_name='show_ratings')
     user = models.ForeignKey(User, related_name='user_show_ratings')
+# class ReviewManager(models.Manager):
+#     def isValidReview(self)
     
 class Review(models.Model):
     title = models.CharField(max_length=255)
@@ -117,7 +119,15 @@ class Review(models.Model):
     rating = models.ForeignKey(ShowRating, related_name="reviews")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # objects = ReviewManager()
 #Show Comments are what users leave on episode pages
+
+class RecentlyViewedShow(models.Model):
+    user = models.ForeignKey(User, related_name="recently_viewed_user")
+    show = models.ForeignKey(Show, related_name="recently_viewed_show")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class EpisodeCommentManager(models.Manager):
     def isValidComment(self, commentInfo, episode_id, user):
@@ -149,3 +159,4 @@ class EpisodeRating(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     episode = models.ForeignKey(Episode, related_name='episode_ratings')
     user = models.ForeignKey(User, related_name='user_episode_ratings')
+

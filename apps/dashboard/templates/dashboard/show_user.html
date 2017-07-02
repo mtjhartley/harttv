@@ -1,76 +1,104 @@
 {% extends 'harttv_app/base.html' %}
     {% block content %}
             <div class='col-md-12' style="margin-bottom: 100px;">
-                <h1>This is {{user.first_name}}'s Page</h1>
-                <h4>Join Date: {{user.created_at|date:"m/d/Y"}} </h4>
-                <h4>Email: {{user.email}} </h4>
-                <h4>Description</h4>
-                <p>{{description.description_text}}</p>
+                <div class='row'>
+                <p class='edit-profile-title' id='edit-profile'>{{user.first_name}} {{user.last_name}}</p><p class='edit-profile-title' id='edit-profile-name'>&nbsp;//&nbsp;View Profile</p>
+                </div>
+                <div class='row'>
+                    <div class='col-md-6'>
+                        <p class='show-table-description'>{{description.description_text}}</p>
+                        <p class='show-table-description'>Joined: {{user.created_at|date:"F Y"}} </h4>
+                    </div>
+                </div>
                 <div class='row'>
                     <div class='col-md-4'>
-                        <h3>Favorite Shows</h3>
-                        <ul>
+                        <h3 class='edit-profile-title'>Favorite Shows</h3>
+                        <div class='favorite-shows'>
                         
-                        {% for favorite in user.users_favorites.all %}
-                            <li><a href="{% url 'harttv:view_show' favorite.maze_id %}">{{favorite.title}}</a></li> 
-                            <p>{{favorite.network}} {{favorite.premiered|date:"Y"}}</p> 
-                            <p>{{favorite.status}}</p>
-                        {% endfor %}
-                        </ul>
-                    </div>
-
-                    <div class='col-md-4'>
-                        <h3>Top Rated Shows</h3>
-                        {% for rated_show in top_rated_shows %}
-                            <p>Title: {{rated_show.show.title}} Rating: {{rated_show.rating}}</p>
-                        {% endfor %}
-                    </div>
-
-                    <div class='col-md-4'>
-                        <h3>User's Reviews</h3>
-                        {% for review in users_reviews %}
-                            <p>Review Title: {{review.title}} for {{review.show.title}}</p>
-                            <p>Review Content: {{review.text}}</p>
-                            <p>Review Rating: {{review.rating.rating}}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-
-
-
-
-                <div class='message_container'>
-                    <h1>Messages:</h1>
-                    {% for message in messages %}
-                        <div class='message_container'>
-                            <h3>{{message.user.first_name}}: {{message.message_text}} {{message.created_at}}</h3>
-                            {% for comment in message.messages_comments.all %}
-                                <div class='comment_container'>
-                                    <p>{{comment.commenter.first_name}}: {{comment.comment_text}}</p>
-                                    <p>{{comment.created_at}}</p>
+                            {% for favorite in user.users_favorites.all %}
+                                <div class="col-sm-4" class='individual-episode-container'>
+                                    <a href="{% url 'harttv:view_show' favorite.maze_id %}"><img src="{{favorite.image_link}}" class='favorite-image' alt="Ep Thumbnail" style="max-width: 100%; max-height: 100%;"></a>
                                 </div>
+                                {% if forloop.counter|divisibleby:3 %}
+   
+
+                                {% endif %}
                             {% endfor %}
                         </div>
-
-                        <form action="{% url 'dashboard:create_comment' message.id %}" method='post'>
-                            {% csrf_token %}
-                            <div class='form-group' style='margin-left: 10px;'>
-                                <label for="comment">Leave a comment on this message</label>
-                                <textarea name='comment' id='comment' class='form-control' style='max-width: 64%;'></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-
-                    {% endfor %}
-            
-                </div>
-                <form action="{% url 'dashboard:create_message' user.id %}" method='post'>
-                    {% csrf_token %}
-                    <div class='form-group'>
-                        <label for="message">Leave a Message for {{user.first_name}}</label>
-                        <textarea name='message' id='message' class='form-control'></textarea>
                     </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                </form>
+
+                    <div class='col-md-4'>
+                        <h3 class='edit-profile-title'>Top Rated Shows</h3>
+                        <div class='favorite-shows'>
+                            {% for rated_show in top_rated_shows %}
+
+                                <div class="col-sm-4" class='individual-episode-container'>
+                                    <a href="{% url 'harttv:view_show' rated_show.show.maze_id %}"><img src="{{rated_show.show.image_link}}" class='favorite-image' alt="Ep Thumbnail" style="max-width: 100%; max-height: 100%;"></a>
+                                </div>
+                                {% if forloop.counter|divisibleby:3 %}
+
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <h3 class='edit-profile-title'>User's Reviews</h3>
+                        <div class='favorite-shows'>
+                            {% for review in users_reviews %}
+                                <p class='user-page-review-title'><a href="{% url 'harttv:view_show' review.show.maze_id %}"><span class='top-rated-show-title'>{{review.title}}</span>&nbsp;//&nbsp;<span class='top-rated-show-title' style="font-size:1em;">{{review.show.title}}</span></a></p>
+                                <p class='user-page-review-rating'>Score: {{review.rating.rating}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                <div class='col-md-12' style='max-width: 60%; margin-top: 20px;'>
+                    <div class='row'>
+                        <p class='edit-profile-title' id='edit-profile'>{{user.first_name}}'s Wall</p>
+                    </div>
+                        {% for message in messages %}
+                            <div class='message_container'>
+                                <div class='row'>
+                                    <div class='initial-message'>
+                                        <p class='message-author'>{{message.user.first_name}} {{message.user.last_name}} - <span class='message-date'>{{message.created_at}}</span></p>
+                                        <p class='message-text'>{{message.message_text}} {{message.created_at}}</p>
+                                    </div>
+                                </div>
+                                {% for comment in message.messages_comments.all %}
+                                    <div class='comment_container'>
+                                        <p class='comment-author'>{{comment.commenter.first_name}} {{comment.commenter.last_name}} - <span class='comment-date'>{{comment.created_at}}</span></p>
+                                        <p>{{comment.comment_text}}</p>
+                                    </div>
+                                {% endfor %}
+                            
+
+                            <form action="{% url 'dashboard:create_comment' message.id %}" method='post'>
+                                {% csrf_token %}
+                                <div class='form-group' style='margin-left: 10px;'>
+                                    <label for="comment">Leave a comment on this message</label>
+                                    <textarea name='comment' id='comment' class='form-control' style='max-width: 64%;'></textarea>
+                                    <button type="submit" class="btn btn-default message-comment-submit">Comment!</button>
+                                </div>
+                            </form>
+
+                        {% endfor %}
+                
+                    
+                    <div class='row'>
+                        <form action="{% url 'dashboard:create_message' user.id %}" method='post'>
+                            {% csrf_token %}
+                            <div class='form-group'>
+                                <label for="message">Leave a Message for {{user.first_name}}</label>
+                                <textarea name='message' id='message' class='form-control'></textarea>
+                                <button type="submit" class="btn btn-default message-comment-submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+                </div>
             </div>
         {% endblock %}
