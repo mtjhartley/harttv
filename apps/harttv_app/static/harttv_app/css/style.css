@@ -484,6 +484,7 @@ label {
 }
 .random-episode-description {
     color: #EEEEEE;
+    font-size: .875em;
 }
 .random-episode-view-show {
     color: #EEEEEE;
@@ -516,3 +517,5 @@ label {
     width:140px; height:180px;
     border: 2px  solid #686868;
 }
+
+.navbar-collapse { background:#173D4C;}

@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 def index(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     user = User.objects.get(id=request.session['id'])
     boolean = user.admin
     context = {
@@ -22,6 +24,8 @@ def index(request):
 
 
 def add_user(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     user = User.objects.get(id=request.session['id'])
     boolean = user.admin
     if boolean:
@@ -36,6 +40,8 @@ def create_user(request):
     return redirect(reverse('dashboard:index'))
 
 def edit_user(request, user_id):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     print user_id
     user = User.objects.get(id=user_id)
 
@@ -103,6 +109,8 @@ def destroy_user(request, user_id):
     return redirect(reverse('dashboard:index'))
 
 def show_user(request, user_id):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     user = User.objects.get(id=user_id)
     if Description.objects.filter(user=user):
         description = Description.objects.get(user=user)

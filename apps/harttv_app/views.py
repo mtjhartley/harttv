@@ -12,14 +12,22 @@ from ..login_registration.models import User
 tvm = pytvmaze.TVMaze('mtjhartley')
 # Create your views here.
 
+from django.contrib.auth.decorators import login_required
+
+# def is_user_logged_in(request):
+#     if not 'id' in request.session:
+#         return redirect(reverse('auth:index'))
+
 def generate_rating_options():
     ratings = [1,2,3,4,5,6,7,8,9,10]
     ratings_strings = ["(1) Appalling", "(2) Atrocious", "(3) Very Bad", "(4) No Good", "(5) Alright", "(6) Good", "(7) Enjoyable", "(8) Great", "(9) Amazing", "(10) Swag Me Out!"]
     rating_options = zip(ratings, ratings_strings)
     return rating_options
 
-
+#@login_required(login_url='auth:index')
 def index(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     random_idx = random.randint(0, Show.objects.count() - 1)
     random_show = Show.objects.all()[random_idx]
     # show_average_rating = ShowRating.objects.aggregate(Avg('rating')).order_by('-rating').distinct('show')
@@ -40,6 +48,8 @@ def index(request):
     return render(request, 'harttv_app/index.html', context)
 
 def view_all_shows(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     context = {
         "shows": Show.objects.all().order_by('title')
     }
@@ -47,6 +57,8 @@ def view_all_shows(request):
 
 
 def view_show(request, show_maze_id):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     user = User.objects.get(id=request.session['id'])
     if len(Show.objects.filter(maze_id=show_maze_id)) == 1:
         show = Show.objects.get(maze_id=show_maze_id)
@@ -123,19 +135,27 @@ def test_search_bar(request):
     return render(request, 'harttv_app/search.html')        
 
 def search_results(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     search = request.GET['show_search']
     search_string = search.strip().lower() #check if tvmaze is case sensitive
     print "*" * 50
     print search_string
-    searchShows = pytvmaze.get_show_list(search_string)
+    try:
+        searchShows = pytvmaze.get_show_list(search_string)
+        results = True
+
+    except:
+        searchShows = []
+        results = False
     print "shows"
     print searchShows
     print "type(shows)"
     print type(searchShows)
-    print type(searchShows[0])
+    # print type(searchShows[0])
     print "name and id"
-    print "name", searchShows[0].name
-    print "id", searchShows[0].maze_id
+    # print "name", searchShows[0].name
+    # print "id", searchShows[0].maze_id
     print "for loop"
     show_list = []
     #for some reason, can't just pass in the searchShows to context...
@@ -164,6 +184,7 @@ def search_results(request):
         #"searchShows": searchShows,
         "contextShow": show_list,
         "search": search,
+        "results": results,
     }
 
     return render (request, 'harttv_app/search_results.html', context)
@@ -182,6 +203,7 @@ def search_results(request):
 
 #refactor to review.model manager later. 
 def handle_add_review(request, show_id):
+    
     if request.method == 'POST':
         show = Show.objects.get(id=show_id)
         user = User.objects.get(id=request.session['id'])
@@ -240,6 +262,8 @@ def handle_remove_favorite(request, show_id):
         return HttpResponseRedirect(url)
 
 def view_episode(request, episode_id):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     user = User.objects.get(id=request.session['id'])
     episode = Episode.objects.get(id=episode_id)
     show = Show.objects.get(id=episode.show.id)
@@ -331,6 +355,8 @@ def handle_update_episode_rating(request, episode_id):
 
 
 def about(request):
+    if not 'id' in request.session:
+        return redirect(reverse('auth:index'))
     return render(request, 'harttv_app/about.html')
 
 def delete_all_shows(request):

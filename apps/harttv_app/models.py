@@ -13,17 +13,23 @@ class ShowManager(models.Manager):
         showMap = {}
         show = tvm.get_show(maze_id=maze_id, embed='episodes')
         showMap['title'] = show.name
-        showMap['description'] = show.summary
+        showMap['maze_id'] = show.maze_id
+        if show.summary:
+            showMap['description'] = show.summary
+        else:
+            showMap['description'] = "No description available."
         showMap['status'] = show.status
         showMap['premiered'] = datetime.datetime.strptime(show.premiered, '%Y-%m-%d').date()
         try:
             showMap['network'] = show.network.name
         except AttributeError:
             showMap['network'] = ""
-        showMap['image_link'] = show.image['original']
-        showMap['maze_id'] = show.maze_id
-
-        new_show = Show.objects.create(title = showMap['title'], description=showMap['description'], status=showMap['status'], premiered=showMap['premiered'], network=showMap['network'], image_link=showMap['image_link'], maze_id=showMap['maze_id'])
+        try:
+            showMap['image_link'] = show.image['original']
+            new_show = Show.objects.create(title = showMap['title'], description=showMap['description'], status=showMap['status'], premiered=showMap['premiered'], network=showMap['network'], image_link=showMap['image_link'], maze_id=showMap['maze_id'])
+        except:
+            new_show = Show.objects.create(title = showMap['title'], description=showMap['description'], status=showMap['status'], premiered=showMap['premiered'], network=showMap['network'], maze_id=showMap['maze_id'])
+        
         return new_show
 
 

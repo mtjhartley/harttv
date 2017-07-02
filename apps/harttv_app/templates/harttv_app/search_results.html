@@ -1,6 +1,10 @@
 {% extends 'harttv_app/base.html' %}
     {% block content %}
-        <h2>Search Results for "{{search}}"</h2>
+        {% if results %}
+        <h2>Search results for "{{search}}"</h2>
+        {% else %}
+        <h2>No results found for "{{search}}". Please refine your query and try again.</h2>
+        {% endif %}
         {% for show in contextShow %}
         <div class='row show-row'>
             <div class='col-md-12 show-table-header'>
