@@ -99,10 +99,18 @@
                     <div class='reviews'>
                         {% for review in show.reviews.all %}
                             {% if show.reviews.all %}
+                                
                             <div class='review'>
                                 <p><span class='reviewer-name'>{{review.user.first_name}}</span><span class='reviewer-title'> - {{review.title}}</span><span class='reviewer-date'>{{review.created_at|date:"m/d/y"}}</span></p>
                                 <p class='review-text'>{{review.text}}</p>
                                 <p class='review-rating'>Rating: {{review.rating.rating}}</p>
+                                {% if review.user.id == request.session.id %}
+                                <form action="{% url 'harttv:handle_delete_review' review.id show.id %}" method='post'>
+                                    {% csrf_token %}
+                                    <button class='btn btn-link'>Delete</button>
+                                </form>
+
+                                {% endif %}
                                 <hr>
                             </div>
                             {% else %}

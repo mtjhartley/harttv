@@ -9,9 +9,8 @@ import threading
 import random
 
 from ..login_registration.models import User
-# tvm = pytvmaze.TVMaze('mtjhartley')
+tvm = pytvmaze.TVMaze('mtjhartley')
 # Create your views here.
-
 
 
 # def is_user_logged_in(request):
@@ -28,7 +27,7 @@ def get_users_recently_viewed_shows(user):
     last_4_viewed = []
 
     users_recently_viewed = list(RecentlyViewedShow.objects.filter(user=user).order_by('-created_at').values_list('show__title', 'show__maze_id', 'show__image_link').distinct())
-
+    
     iter_index = 0
     while len(last_4_viewed) < 4 and iter_index < len(users_recently_viewed):
         if users_recently_viewed[iter_index] not in last_4_viewed:
@@ -249,6 +248,13 @@ def handle_add_review(request, show_id):
             Review.objects.create(title=review_title, text=review_text,user=user, show=show, rating=rating)
             url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
             return HttpResponseRedirect(url)
+
+def handle_delete_review(request, review_id, show_id):
+    if request.method == 'POST':
+        Review.objects.get(id=review_id).delete()
+        show = Show.objects.get(id=show_id)
+        url = reverse('harttv:view_show', kwargs={'show_maze_id': show.maze_id})
+        return HttpResponseRedirect(url)
 
 def handle_add_favorite(request, show_id):
     if request.method == 'POST':
