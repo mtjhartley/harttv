@@ -47,7 +47,7 @@ body {
 /*font-family: 'Open Sans', sans-serif;*/
 
 .form-control {
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 }
 
 #register-box {
@@ -102,12 +102,12 @@ body {
 }
 
 /* Footer links */
-
 footer {
-  position: absolute;
+  margin-top: 40px;
+  position: fixed;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
+   /*Set the fixed height of the footer here */
   height: 60px;
   background-color: #006C99;
 }
@@ -128,10 +128,32 @@ label {
     font-size: 1em;
 }
 
+.submit-button {
+    background-color: #0090CC;
+    border-color:#0090CC;
+    border-left: 0px;
+    font-family: 'Roboto', sans-serif;
+    color: #EEEEEE;
+    float: right;
+}
+.update-description-button {
+    margin-top: 10px;
+}
+.footer-brand {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5em;
+
+    margin-left: 15px;
+    background-color: #173D4C;
+    padding: 5px;
+
+}
+
 .footer-container .footer-brand, .footer-text{
     margin-top: -5px;
     display: inline-block;
-    vertical-align: top; 
+    vertical-align: top;
 }
 .footer-container .footer-text {
     margin-left: 15px;

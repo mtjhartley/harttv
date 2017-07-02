@@ -6,6 +6,7 @@ from .models import Show, Episode, Review, EpisodeComment, EpisodeRating, ShowRa
 import datetime
 import pytvmaze
 import threading
+import random
 
 from ..login_registration.models import User
 tvm = pytvmaze.TVMaze('mtjhartley')
@@ -19,7 +20,23 @@ def generate_rating_options():
 
 
 def index(request):
-    context = {}
+    random_idx = random.randint(0, Show.objects.count() - 1)
+    random_show = Show.objects.all()[random_idx]
+    # show_average_rating = ShowRating.objects.aggregate(Avg('rating')).order_by('-rating').distinct('show')
+    top_ranked_shows = ShowRating.objects.values_list('show__title', 'show__maze_id', 'show__image_link').annotate(average_rank=Avg('rating')).order_by('-average_rank')[:3]
+    print top_ranked_shows[0]
+    print top_ranked_shows[0][0]
+    print top_ranked_shows[0][1]
+    print top_ranked_shows[0][2]
+    print top_ranked_shows
+
+    # all_shows_average_rating = Show.objects.values_list('title').annotate(Avg('show_ratings'))
+    # print all_shows_average_rating
+    context = {
+        "show": random_show,
+        "top_rated": top_ranked_shows,
+
+    }
     return render(request, 'harttv_app/index.html', context)
 
 def view_all_shows(request):

@@ -1,151 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        {% load staticfiles %}
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,900" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'harttv_app/css/style.css' %}">
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url 'harttv:index' %}">Hart<span class='hart_tv_TV'>TV</span></a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'dashboard:index' %}">User Dashboard</a></li>
-                    <li><a href="#">Top All-Time Shows</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                </ul>
-                <li><a href="{% url 'harttv:about' %}">About</a></li>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                <a href="#" id="nav-user" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{request.session.first_name}}<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'dashboard:show_user' request.session.id %}">View Profile</a></li>
-                    <li><a href="{% url 'dashboard:edit_user' request.session.id %}">Account Management</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="{% url 'auth:logout' %}">Logout</a></li>
-                </ul>
-                </li>
-            </ul>
-            <form class="navbar-form navbar-right" action="{% url 'harttv:search_results' %}">
-                <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search for a show..." name="show_search" id="show_search">
-                </div>
-                <button type="submit" class="btn btn-default" id="search_button">Search!</button>
-            </form>
-            </div><!-- /.navbar-collapse -->
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-        </div>
-        </nav>
-        <div class='container'>
-            <h1>Edit User # {{user.id}}</h1>
+{% extends 'harttv_app/base.html' %}
+    {% block content %}
+            <p class='edit-profile-title' id='edit-profile'>{{user.first_name}} {{user.last_name}}</p><p class='edit-profile-title' id='edit-profile-name'>&nbsp;//Edit Profile</h4>
             <div class='row'>
-                <div class='col-md-6'>
-                    <h2>Edit Information</h2>
-                    <form action="{% url 'dashboard:update_user' user_id=user.id %}" method='post'>
-                        {% csrf_token %}
-                        <div class='form-group'>
-                            <label for='email'>Email: </label>
-                            <input type='text' name='email' id='email' class='form-control' value="{{user.email}}">
-                        </div>
-                        <div class='form-group'>
-                            <label for='first_name'>First Name: </label>
-                            <input type='text' name='first_name' id='first_name' class='form-control' value="{{user.first_name}}">
-                        </div>
-                        <div class="form-group">
-                            <label for='last_name'>Last Name: </label>
-                            <input type='text' name='last_name' id='last_name' class='form-control' value="{{user.last_name}}">
-                        </div>
+            <div class='col-md-4'>
+                <h3 class='edit-header'>Update Information</h3>
+                <form action="{% url 'dashboard:update_user' user_id=user.id %}" method='post'>
+                    {% csrf_token %}
+                    <div class='form-group'>
+                        <label for='email'>Email: </label>
+                        <input type='text' name='email' id='email' class='form-control' value="{{user.email}}">
+                    </div>
+                    <div class='form-group'>
+                        <label for='first_name'>First Name: </label>
+                        <input type='text' name='first_name' id='first_name' class='form-control' value="{{user.first_name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for='last_name'>Last Name: </label>
+                        <input type='text' name='last_name' id='last_name' class='form-control' value="{{user.last_name}}">
+                    </div>
 
-                        {% if boolean %}
-                        <div class="form-group">
-                            <select name='admin'>
-                                <option value='False'>Normal</option>
-                                <option value='True' selected>Admin</option>
-                            </select>
-                        </div>
-                        {% endif %}
-                        
-                        <button type="submit" class="btn btn-default submit-button">Submit</button>
-                    </form>
+                    {% if boolean %}
+                    <label for='admin'>Admin: </label>
+                    <div class="form-group">
+                        <select name='admin' class='form-control' style='max-width: 60%'>
+                            <option value='False'>Normal</option>
+                            <option value='True' selected>Admin</option>
+                        </select>
+                    </div>
+                    {% endif %}
+                    
+                    <button type="submit" class="btn btn-default submit-button">Submit</button>
+                </form>
 
-                </div>
-                <div class='col-md-6'>
-                    <h2>Change Password</h2>
-                    <form action="{% url 'dashboard:update_user' user.id %}" method='post'>
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for='password'>Password: </label>
-                            <input type='password' name='password' id='password' class='form-control' placeholder="Password">
-                        </div>
-
-                        <div class="form-group">
-                            <label for='confirm_password'>Confirm Password: </label>
-                            <input type='password' name='confirm_password' id='confirm_password' class='form-control' placeholder="Confirm Password">
-                        </div>
-                        <button type="submit" class="btn btn-default submit-button">Submit</button>
-                    </form>
-                </div>
             </div>
+            <div class='col-md-4'>
+                <h3 class='edit-header'>Change Password</h3>
+                <form action="{% url 'dashboard:update_user' user.id %}" method='post'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for='password'>Password: </label>
+                        <input type='password' name='password' id='password' class='form-control' placeholder="Password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for='confirm_password'>Confirm Password: </label>
+                        <input type='password' name='confirm_password' id='confirm_password' class='form-control' placeholder="Confirm Password">
+                    </div>
+                    <button type="submit" class="btn btn-default submit-button">Submit</button>
+                </form>
+            </div>
+            </div>
+
             <div class='row'>
-                <div class='col-md-6'>
-                    <h2>Update Description</h2>
-                    <form action="{% url 'dashboard:update_user_description' user.id %}" method='post'>
-                        {% csrf_token %}
-                        <div class='form-group'>
-                            <textarea style="max-width: 100%;" name='description' class='form-control'>{{description.description_text}}</textarea>
-                            <button type="submit" class="btn btn-default submit-button update-description-button">Update</button>  
-                        </div>
-                    </form>
-                </div>
+            <div class='col-md-4'>
+                <h3 class='edit-header'>Update Description</h3>
+                <form action="{% url 'dashboard:update_user_description' user.id %}" method='post'>
+                    {% csrf_token %}
+                    <div class='form-group'>
+                        <textarea style="max-width: 100%;" name='description' class='form-control'>{{description.description_text}}</textarea>
+                        <button type="submit" class="btn btn-default submit-button update-description-button">Update</button>  
+                    </div>
+                </form>
             </div>
-            
-            
-
-
-        </div>
-            <footer>
-            
-            <div class="container-fluid footer-container">
-                    <a class="footer-brand" href="#">Hart<span class='hart_tv_TV'>TV</span></a>
-
-                    <p class="footer-text">2017 Michael Hartley</p>
-                    <p class="footer-text footer-right">mtjhartley@gmail.com</p>
-                    <a class="footer-text footer-right" href="https://www.github.com/mtjhartley">GitHub</a>
-                    <p class="footer-text footer-right">Portfolio (Coming Soon)</p>
-                    <p class="footer-text footer-right"></p>
-                        
-
-
-
             </div>
-            </footer>
-    
-    </body>
-</html>
+
+    {% endblock %}
+            
+            
+

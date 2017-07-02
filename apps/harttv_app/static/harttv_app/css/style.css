@@ -428,3 +428,86 @@ footer {
     text-decoration: none;
 }
 
+label {
+    color: #0090CC;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+}
+
+.edit-profile-title {
+    display: inline-block;
+    color: #0090CC;
+
+}
+#edit-profile {
+    color: #006C99;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+#edit-profile-name {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+.edit-header {
+    color: #173D4C;
+}
+
+.random-episode {
+    width: 300px;
+    height: 440px;
+}
+
+.random-episode-image {
+ 
+    width: 300px;
+    height: 440px;
+    /*object-fit: contain;*/
+    border: 2px solid #686868;
+}
+
+
+.random-episode-information {
+    height: 120px;
+    width: 300px;
+    background-color: #0090CC;
+    border: 2px solid #686868;
+    overflow: hidden;
+}
+
+
+.random-episode-title, .random-episode-description {
+    padding: 10px;
+}
+.random-episode-title {
+    color: #EEEEEE;
+    font-size: 1.5em;
+}
+.random-episode-description {
+    color: #EEEEEE;
+}
+.random-episode-view-show {
+    color: #EEEEEE;
+}
+.paragraph-text {
+
+    color: #686868;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+    margin-top: 15px;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+.top-rated-header {
+    color: #173D4C;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.top-rated-show-title {
+   color: #0090CC;
+   float: center;
+}
+.top-rated-show-image {
+    width:160px; height:160px;
+}

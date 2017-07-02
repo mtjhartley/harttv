@@ -1,5 +1,65 @@
 {% extends 'harttv_app/base.html' %}
     {% block content %}
-            <h1>Nothing here...yet!</h1>
+            <div class='col-md-4'>
+                <div class='random-episode'>
+                   
+                    <a href="{% url 'harttv:view_show' show.maze_id %}"><img src="{{show.image_link}}" class='random-episode-image'></a>
+                    <div class='random-episode-information'>
+                        <p class='random-episode-description'>{{show.description|truncatewords:25}}</p>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+            <div class='col-md-8'>
+                <div class='row'>
+                    <p class='paragraph-text'>
+                        Welcome to HartTV!
+                        This project, created by Michael Hartley, was born out of a love of watching television content and discussing it with friends. 
+                        Registered users can favorite shows, write reviews, get information on individual episodes, and contribute to the rankings.
+                    </p>
+                    <p class='paragraph-text'>
+
+                        When you click on "shows" in the navigation bar, you'll see a list of all the shows that users have 
+                        ever looked for and clicked on through our search feature. The data for these shows are retrieved
+                        using an awesome api called <a href="https://www.tvmaze.com/api">TVMAZE</a>.
+                    </p>
+                    <p class='paragraph-text'>
+                        If you don't see a show that you've watched in this list of shows, fret not! Simply look for the show
+                        with our search bar and you'll be returned a page of the top 10 shows matching your query.
+                        Clicking on any of these shows will dynamically generate that show's page and add it 
+                        to our database!
+                    </p>
+
+                    <p class='paragraph-text'>
+                        Through our community tab, you'll find our user dashboard. Displayed here will be a list of users who have joined the site.
+                        Click a user to see their favorites, top rated shows, and all the reviews they've ever left 
+                        on a show. Lastly, you can leave a message on their user wall and discuss exciting television content!
+
+                    </p>
+                </div>
+                <div class='row'>
+                    <p class='top-rated-header'>User's Top Rated Shows</p>
+                    {% for show in top_rated %}
+                    <div class='col-md-4'>
+                        <h4 class='nowrap top-rated-show-title'>{{show.0}}</h4>
+                        <a href="{{show.1}}">
+                        <img src="{{show.2}}" class='top-rated-show-image'>
+                        </a>
+                        </p>
+                    </div>
+                    {% endfor %}
+
+
+
+                </div>
+                    
+                    
+            
+            </div>
     {% endblock %}
 

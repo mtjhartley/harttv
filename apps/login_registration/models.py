@@ -64,11 +64,11 @@ class UserManager(models.Manager):
             registrationObject['errors'].append("This email already exists in our database.")
             validRegistration = False
         
-        now = datetime.datetime.now()
-        birthday = datetime.datetime.strptime(userInfo['birthday'], '%Y-%m-%d')
-        if birthday > now:
-            registrationObject['errors'].append("You can't be born in the future!")
-            validRegistration = False
+        # now = datetime.datetime.now()
+        # birthday = datetime.datetime.strptime(userInfo['birthday'], '%Y-%m-%d')
+        # if birthday > now:
+        #     registrationObject['errors'].append("You can't be born in the future!")
+        #     validRegistration = False
         
         if validRegistration:
             hashed = bcrypt.hashpw(userInfo['password'].encode(), bcrypt.gensalt())
@@ -92,7 +92,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=60)
-    birthday = models.DateField(null=True, blank=True)
+    # birthday = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     admin = models.BooleanField(default=False)

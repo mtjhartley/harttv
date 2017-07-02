@@ -1,3 +1,7 @@
+{% url 'harttv:about' as harttvabout %}
+{% url 'harttv:view_all_shows' as harttvview_all_shows %}
+{% url 'harttv:index' as harttvindex %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -14,7 +18,7 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -29,15 +33,15 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
+                <li class="{% ifequal request.path harttvindex %}active{% endifequal %}"><a href="{% url 'harttv:index' %}">Home <span class="sr-only">(current)</span></a></li>
+                <li class="{% ifequal request.path harttvview_all_shows %}active{% endifequal %}"><a href="{% url 'harttv:view_all_shows' %}">Shows</a></li> <!--Link to Page that renders all shows currently in db, same as search_result format.-->
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'dashboard:index' %}">User Dashboard</a></li>
                 </ul>
-                <li><a href="{% url 'harttv:about' %}">About</a></li>
-                </li>
+                <li class="{% ifequal request.path harttvabout %}active{% endifequal %}"><a href="{% url 'harttv:about' %}">About</a></li>
+                </li> 
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
@@ -62,7 +66,7 @@
         </div>
         </nav>
         <!--new header ends here -->
-        <div class='container' style="margin-top: 50px; margin-bottom: 100px;">
+        <div class='container' style="margin-top: 100px; margin-bottom: 80px;">
         {% block content %}
 
         {% endblock %}
